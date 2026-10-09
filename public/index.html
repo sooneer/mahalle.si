@@ -8,6 +8,7 @@
 <body>
 <x-dc>
 <helmet>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -35,7 +36,8 @@ input::placeholder{color:#8a8175;}
       <sc-if value="{{ notSubmitted }}" hint-placeholder-val="{{ true }}">
         <form onSubmit="{{ onSubmit }}" style="display:flex;flex-wrap:wrap;gap:10px;max-width:520px;">
           <input type="email" required="required" value="{{ email }}" onChange="{{ onEmail }}" placeholder="E-posta adresiniz" style="flex:1 1 240px;min-width:0;height:52px;padding:0 18px;border:1.5px solid #1f1b16;border-radius:999px;background:transparent;font:inherit;font-size:16px;color:#1f1b16;outline:none;" style-focus="border-color:#b4532a;">
-          <button type="submit" style="white-space:nowrap;flex-shrink:0;height:52px;padding:0 26px;border:none;border-radius:999px;background:#1f1b16;color:#f4efe6;font:inherit;font-size:15px;font-weight:600;cursor:pointer;" style-hover="background:#b4532a;">Açılınca haber ver</button>
+          <button type="submit" disabled="{{ submitDisabled }}" style="white-space:nowrap;flex-shrink:0;height:52px;padding:0 26px;border:none;border-radius:999px;background:#1f1b16;color:#f4efe6;font:inherit;font-size:15px;font-weight:600;cursor:pointer;" style-hover="background:#b4532a;">Açılınca haber ver</button>
+          <div id="cf-turnstile" style="width:100%;"></div>
         </form>
         <p style="font-size:13px;color:#7a7166;margin:14px 0 0;">Sadece açılış duyurusu gönderilir.</p>
         <p style="font-size:13px;color:#b00020;margin:8px 0 0;">{{ error }}</p>
@@ -57,7 +59,28 @@ input::placeholder{color:#8a8175;}
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;showForm&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
 class Component extends DCLogic {
-  state = { email: '', submitted: false, loading: false, error: '' };
+  state = { email: '', submitted: false, loading: false, error: '', turnstileToken: '' };
+  widgetId = null;
+
+  componentDidMount() {
+    const tryRender = () => {
+      if (this.widgetId || this.state.submitted) return;
+      const el = document.getElementById('cf-turnstile');
+      if (!el || typeof window.turnstile === 'undefined') {
+        setTimeout(tryRender, 50);
+        return;
+      }
+      this.widgetId = window.turnstile.render(el, {
+        sitekey: '0x4AAAAAAFSWfYcyHk899CeC',
+        action: 'subscribe',
+        callback: token => this.setState({ turnstileToken: token, error: '' }),
+        'error-callback': () => this.setState({ turnstileToken: '' }),
+        'expired-callback': () => this.setState({ turnstileToken: '' })
+      });
+    };
+    tryRender();
+  }
+
   renderVals() {
     return {
       showForm: this.props.showForm ?? true,
@@ -67,20 +90,25 @@ class Component extends DCLogic {
       onEmail: e => this.setState({ email: e.target.value }),
       error: this.state.error,
       loading: this.state.loading,
+      submitDisabled: this.state.loading || !this.state.turnstileToken,
       onSubmit: async e => {
         e.preventDefault();
-        if (!this.state.email || this.state.loading) return;
+        if (!this.state.email || this.state.loading || !this.state.turnstileToken) return;
         this.setState({ loading: true, error: '' });
+        const token = this.state.turnstileToken;
         try {
           const res = await fetch('/api/subscribe', {
             method: 'POST',
             headers: { 'content-type': 'application/json' },
-            body: JSON.stringify({ email: this.state.email })
+            body: JSON.stringify({ email: this.state.email, 'cf-turnstile-response': token })
           });
           if (!res.ok) throw new Error();
           this.setState({ submitted: true, loading: false });
         } catch {
           this.setState({ loading: false, error: 'Bir sorun oluştu, lütfen tekrar deneyin.' });
+        } finally {
+          this.setState({ turnstileToken: '' });
+          if (this.widgetId && window.turnstile) window.turnstile.reset(this.widgetId);
         }
       }
     };
