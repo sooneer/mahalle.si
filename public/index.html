@@ -1,119 +1,311 @@
 <!DOCTYPE html>
-<html>
+<html lang="tr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="main.js"></script>
+<title>Ataşehir Mahalle Rehberi · mahalle.si</title>
+<meta name="description" content="Ataşehir'in mahalle rehberi: nöbetçi eczaneler, özel okullar, kuyumcular, ustalar, kafeler ve komşuluk ilanları tek yerde.">
+<meta name="theme-color" content="#14a3a0">
+<meta property="og:title" content="ataşehir.mahalle.si: Ataşehir'de ne arıyorsun?">
+<meta property="og:description" content="Nöbetçi eczaneden çilingire, özel okuldan kuyumcuya; Ataşehir'in mahalle rehberi.">
+<meta property="og:locale" content="tr_TR">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 2C9.4 2 4 7.2 4 13.7 4 22.3 16 30 16 30s12-7.7 12-16.3C28 7.2 22.6 2 16 2z' fill='%2314a3a0'/%3E%3Ccircle cx='16' cy='13.5' r='5' fill='%23ff8a3d'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<x-dc>
-<helmet>
-<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-html,body{margin:0;background:#f4efe6;}
-*{box-sizing:border-box;}
-a{color:#1f1b16;text-decoration:underline;text-underline-offset:3px;}
-a:hover{color:#b4532a;}
-input::placeholder{color:#8a8175;}
-</style>
-</helmet>
-<div style="min-height:100vh;display:flex;flex-direction:column;background:#f4efe6;color:#1f1b16;font-family:'Manrope',sans-serif;padding:clamp(20px,4vw,48px);">
-  <header style="display:flex;justify-content:space-between;align-items:center;gap:16px;">
-    <div style="font-family:'DM Serif Display',serif;font-size:28px;letter-spacing:-0.01em;">mahalle<span style="color:#b4532a;">.si</span></div>
-    <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:500;color:#5c544a;">
-      <span style="width:8px;height:8px;border-radius:50%;background:#b4532a;"></span>
-      <span style="white-space:nowrap;">Yapım aşamasında</span>
+
+<!-- İkon sprite'ı -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <mask id="m-wrench"><rect width="40" height="40" fill="#fff"/><rect x="17" y="0" width="6" height="10" rx="1.5" fill="#000"/></mask>
+  </defs>
+  <symbol id="i-pin" viewBox="0 0 24 30"><path d="M12 0C5.4 0 0 5.2 0 11.7 0 20.3 12 30 12 30s12-9.7 12-18.3C24 5.2 18.6 0 12 0z" fill="currentColor"/><circle cx="12" cy="11.5" r="4.5" fill="#fff"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="m15.5 15.5 5 5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h13m-5-5 5 5-5 5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+  <symbol id="i-pharmacy" viewBox="0 0 40 40"><path d="M14 12V9a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3v3" fill="none" stroke="currentColor" stroke-width="3"/><rect x="5" y="11" width="30" height="24" rx="6" fill="currentColor"/><path d="M20 17v12M14 23h12" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/></symbol>
+  <symbol id="i-school" viewBox="0 0 40 40"><path d="M10 19v8c0 3 4.5 6 10 6s10-3 10-6v-8l-10 5Z" fill="currentColor" opacity=".65"/><path d="M20 7 37 15 20 23 3 15Z" fill="currentColor"/><path d="M33 16.5V27" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><circle cx="33" cy="29" r="2.6" fill="currentColor"/></symbol>
+  <symbol id="i-gem" viewBox="0 0 40 40"><path d="M11 8h18l7 9-16 17L4 17Z" fill="currentColor"/><path d="M4 17h32M15 8l-3 9 8 17 8-17-3-9" fill="none" stroke="#fff" stroke-width="1.8" stroke-linejoin="round" opacity=".75"/></symbol>
+  <symbol id="i-tools" viewBox="0 0 40 40"><g transform="rotate(45 20 20)" mask="url(#m-wrench)"><circle cx="20" cy="9" r="8" fill="currentColor"/><rect x="17" y="12" width="6" height="25" rx="3" fill="currentColor"/></g><circle cx="31" cy="31" r="4.5" fill="currentColor" opacity=".55"/></symbol>
+  <symbol id="i-cafe" viewBox="0 0 40 40"><path d="M13 5c-2 2.2 2 3.4 0 6.5M19.5 4c-2 2.6 2 3.8 0 7.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" opacity=".6"/><path d="M27 17h2.2a4.3 4.3 0 0 1 0 8.6H27" fill="none" stroke="currentColor" stroke-width="3"/><path d="M6 14h21v9.5a8.5 8.5 0 0 1-8.5 8.5h-4A8.5 8.5 0 0 1 6 23.5Z" fill="currentColor"/><ellipse cx="17" cy="35" rx="14" ry="2.6" fill="currentColor" opacity=".5"/></symbol>
+  <symbol id="i-paw" viewBox="0 0 40 40"><ellipse cx="18" cy="27" rx="8.5" ry="7.5" fill="currentColor"/><ellipse cx="7.5" cy="18" rx="3.5" ry="4.5" fill="currentColor"/><ellipse cx="13.5" cy="11" rx="3.5" ry="4.8" fill="currentColor"/><ellipse cx="22.5" cy="11" rx="3.5" ry="4.8" fill="currentColor"/><ellipse cx="28.5" cy="18" rx="3.5" ry="4.5" fill="currentColor"/><path d="M33.5 5.2c1.7-1.7 4.6-.2 3.5 2.3L33.5 11 30 7.5c-1.1-2.5 1.8-4 3.5-2.3Z" fill="currentColor" opacity=".7"/></symbol>
+  <symbol id="i-hanger" viewBox="0 0 40 40"><path d="M16.5 10.5a3.5 3.5 0 1 1 4.6 3.3c-.7.3-1.1.9-1.1 1.7V17L35 27.4a2 2 0 0 1-1.1 3.6H6.1A2 2 0 0 1 5 27.4L20 17" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="11" cy="35.5" r="1.8" fill="currentColor" opacity=".5"/><circle cx="17" cy="36.5" r="1.3" fill="currentColor" opacity=".5"/><circle cx="29" cy="35.5" r="1.8" fill="currentColor" opacity=".5"/></symbol>
+  <symbol id="i-key" viewBox="0 0 40 40"><circle cx="13" cy="20" r="8.5" fill="currentColor"/><circle cx="13" cy="20" r="3" fill="#fff"/><path d="M20 20h16M30 20v6M35.5 20v4.5" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></symbol>
+
+  <!-- Stilize semt haritası (popüler kartları için) -->
+  <symbol id="map-base" viewBox="0 0 320 170">
+    <rect width="320" height="170" fill="#eef6f5"/>
+    <path d="M-10 120 C 60 100 90 140 170 118 S 280 90 330 104 V180 H-10Z" fill="#dff1ec"/>
+    <path d="M196 26 c18 -8 44 -4 52 12 s-6 30 -26 30 s-38 -6 -38 -20 s4 -18 12 -22Z" fill="#c9ecd8"/>
+    <path d="M24 30 h46 a8 8 0 0 1 8 8 v22 a8 8 0 0 1 -8 8 h-46 a8 8 0 0 1 -8 -8 v-22 a8 8 0 0 1 8 -8Z" fill="#c9ecd8"/>
+    <path d="M-10 84 C 80 70 160 96 330 64" fill="none" stroke="#ffe0bf" stroke-width="13"/>
+    <path d="M-10 84 C 80 70 160 96 330 64" fill="none" stroke="#fff" stroke-width="2" stroke-dasharray="8 8"/>
+    <path d="M110 -10 L 128 180 M 250 -10 L 232 180 M -10 140 H 330 M -10 40 C 100 46 200 30 330 36" fill="none" stroke="#fff" stroke-width="8"/>
+    <path d="M60 -10 V180 M180 -10 L170 180 M290 -10 V180 M-10 112 H330 M-10 18 H330" fill="none" stroke="#fff" stroke-width="4"/>
+    <text x="160" y="160" text-anchor="middle" font-size="11" font-weight="900" letter-spacing="4" fill="#8fb3b0">ATAŞEHİR</text>
+  </symbol>
+</svg>
+
+<a class="skip" href="#icerik">İçeriğe geç</a>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="/" aria-label="mahalle.si ana sayfa">
+      <span class="brand-logo">
+        <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 2C9.4 2 4 7.2 4 13.7 4 22.3 16 30 16 30s12-7.7 12-16.3C28 7.2 22.6 2 16 2z" fill="#14a3a0"/><path d="M10.5 15.5 16 11l5.5 4.5V20a1 1 0 0 1-1 1h-9a1 1 0 0 1-1-1Z" fill="#fff"/><rect x="14.5" y="16.5" width="3" height="4.5" rx=".8" fill="#ff8a3d"/></svg>
+        <span class="brand-word">mahalle<span>.si</span></span>
+      </span>
+      <span class="brand-sub">
+        <svg aria-hidden="true"><use href="#i-pin"/></svg>
+        ataşehir.mahalle.si
+      </span>
+    </a>
+
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Menüyü aç">
+      <svg aria-hidden="true"><use href="#i-menu"/></svg>
+    </button>
+
+    <nav class="site-nav" id="site-nav" aria-label="Ana menü">
+      <a href="#kesfet" data-focus="eczane">Nöbetçi Eczaneler</a>
+      <a href="#populer">Esnaflar</a>
+      <a href="#" data-soon="İlanlar">İlanlar</a>
+      <a href="#" data-soon="Topluluk">Topluluk</a>
+      <a href="#" class="btn btn-navy" data-soon="Üyelik">Giriş Yap</a>
+    </nav>
+  </div>
+</header>
+
+<main id="icerik">
+
+  <!-- Hero -->
+  <section class="hero" aria-labelledby="hero-title">
+    <svg class="cloud cloud-1" viewBox="0 0 120 50" aria-hidden="true"><path d="M20 46h80a18 18 0 0 0 0-36 26 26 0 0 0-48-4A20 20 0 0 0 20 46Z" fill="#fff"/></svg>
+    <svg class="cloud cloud-2" viewBox="0 0 120 50" aria-hidden="true"><path d="M20 46h80a18 18 0 0 0 0-36 26 26 0 0 0-48-4A20 20 0 0 0 20 46Z" fill="#fff"/></svg>
+    <svg class="cloud cloud-3" viewBox="0 0 120 50" aria-hidden="true"><path d="M20 46h80a18 18 0 0 0 0-36 26 26 0 0 0-48-4A20 20 0 0 0 20 46Z" fill="#fff"/></svg>
+    <div class="sun" aria-hidden="true"></div>
+
+    <div class="container hero-content">
+      <p class="eyebrow"><span class="dot"></span>Ataşehir'in mahalle rehberi</p>
+      <h1 id="hero-title">Ataşehir'de <span class="hl">ne arıyorsun?</span></h1>
+
+      <form class="search" role="search" id="search-form">
+        <label class="sr-only" for="q">Ataşehir'de ara</label>
+        <svg class="search-icon" aria-hidden="true"><use href="#i-search"/></svg>
+        <input id="q" name="q" type="search" autocomplete="off" placeholder="Özel okul, kuyumcu, çilingir, eczane...">
+        <button class="btn btn-orange" type="submit">Ara</button>
+      </form>
+
+      <div class="chips" aria-label="Popüler aramalar">
+        <span class="chips-label">Popüler:</span>
+        <button type="button" class="chip">Nöbetçi eczane</button>
+        <button type="button" class="chip">Özel okul</button>
+        <button type="button" class="chip">Çilingir</button>
+        <button type="button" class="chip">Tesisatçı</button>
+        <button type="button" class="chip">Kuyumcu</button>
+      </div>
     </div>
-  </header>
 
-  <main style="flex:1;display:flex;flex-direction:column;justify-content:center;max-width:880px;padding:clamp(48px,10vh,120px) 0;">
-    <h1 style="font-family:'DM Serif Display',serif;font-weight:400;font-size:clamp(48px,9vw,112px);line-height:0.98;letter-spacing:-0.02em;margin:0 0 28px;text-wrap:balance;">Mahallemiz <em style="color:#b4532a;">kuruluyor.</em></h1>
-    <p style="font-size:clamp(17px,2vw,20px);line-height:1.55;color:#4a433a;max-width:560px;margin:0 0 40px;text-wrap:pretty;">Komşularınızla tanışabileceğiniz, mahallenizdeki gelişmeleri takip edebileceğiniz yeni bir yer hazırlıyoruz. Çok yakında buradayız.</p>
+    <img class="hero-scene" src="img/hero-scene.svg" alt="" width="1440" height="340">
+  </section>
 
-    <sc-if value="{{ showForm }}" hint-placeholder-val="{{ true }}">
-      <sc-if value="{{ notSubmitted }}" hint-placeholder-val="{{ true }}">
-        <form onSubmit="{{ onSubmit }}" style="display:flex;flex-wrap:wrap;gap:10px;max-width:520px;">
-          <input type="email" required="required" value="{{ email }}" onChange="{{ onEmail }}" placeholder="E-posta adresiniz" style="flex:1 1 240px;min-width:0;height:52px;padding:0 18px;border:1.5px solid #1f1b16;border-radius:999px;background:transparent;font:inherit;font-size:16px;color:#1f1b16;outline:none;" style-focus="border-color:#b4532a;">
-          <button type="submit" disabled="{{ submitDisabled }}" style="white-space:nowrap;flex-shrink:0;height:52px;padding:0 26px;border:none;border-radius:999px;background:#1f1b16;color:#f4efe6;font:inherit;font-size:15px;font-weight:600;cursor:pointer;" style-hover="background:#b4532a;">Açılınca haber ver</button>
-          <div id="cf-turnstile" style="width:100%;"></div>
-        </form>
-        <p style="font-size:13px;color:#7a7166;margin:14px 0 0;">Sadece açılış duyurusu gönderilir.</p>
-        <p style="font-size:13px;color:#b00020;margin:8px 0 0;">{{ error }}</p>
-      </sc-if>
-      <sc-if value="{{ submitted }}" hint-placeholder-val="{{ false }}">
-        <div style="display:flex;align-items:center;gap:12px;font-size:17px;font-weight:500;">
-          <span style="width:32px;height:32px;border-radius:50%;background:#b4532a;color:#f4efe6;display:flex;align-items:center;justify-content:center;font-size:16px;">✓</span>
-          <span>Teşekkürler. Açıldığımızda {{ email }} adresine haber vereceğiz.</span>
+  <!-- Hızlı Keşfet -->
+  <section class="section" id="kesfet" aria-labelledby="kesfet-title">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <h2 id="kesfet-title">Hızlı Keşfet</h2>
+          <p>Mahallede en çok aranan hizmetlere tek dokunuşla ulaş.</p>
         </div>
-      </sc-if>
-    </sc-if>
-  </main>
+      </div>
 
-  <footer style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;font-size:13px;color:#7a7166;border-top:1px solid #d9d0c2;padding-top:20px;">
-    <span style="white-space:nowrap;">© 2026 mahalle.si</span>
-    <a href="mailto:merhaba@mahalle.si" style="color:#5c544a;">merhaba@mahalle.si</a>
-  </footer>
-</div>
-</x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;showForm&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
-class Component extends DCLogic {
-  state = { email: '', submitted: false, loading: false, error: '', turnstileToken: '' };
-  widgetId = null;
+      <ul class="cat-grid">
+        <li><a class="cat-card" id="cat-eczane" href="#" data-soon="Nöbetçi Eczaneler" style="--c:#e8505b;--c-bg:#ffecee">
+          <span class="cat-icon"><svg aria-hidden="true"><use href="#i-pharmacy"/></svg></span>
+          <span class="cat-name">Nöbetçi Eczaneler</span>
+          <span class="cat-desc">Bu gece açık olan eczaneler</span>
+          <span class="cat-link">Hemen Göz At <svg aria-hidden="true"><use href="#i-arrow"/></svg></span>
+        </a></li>
+        <li><a class="cat-card" id="cat-okul" href="#" data-soon="Özel Okullar" style="--c:#0f8a87;--c-bg:#e3f6f5">
+          <span class="cat-icon"><svg aria-hidden="true"><use href="#i-school"/></svg></span>
+          <span class="cat-name">Özel Okullar</span>
+          <span class="cat-desc">Anaokulundan liseye</span>
+          <span class="cat-link">Hemen Göz At <svg aria-hidden="true"><use href="#i-arrow"/></svg></span>
+        </a></li>
+        <li><a class="cat-card" id="cat-kuyumcu" href="#" data-soon="Kuyumcular" style="--c:#e8701f;--c-bg:#fff1e6">
+          <span class="cat-icon"><svg aria-hidden="true"><use href="#i-gem"/></svg></span>
+          <span class="cat-name">Kuyumcular</span>
+          <span class="cat-desc">Altın, pırlanta, saat</span>
+          <span class="cat-link">Hemen Göz At <svg aria-hidden="true"><use href="#i-arrow"/></svg></span>
+        </a></li>
+        <li><a class="cat-card" id="cat-usta" href="#" data-soon="Ustalar &amp; Tesisatçılar" style="--c:#22356a;--c-bg:#e8edf7">
+          <span class="cat-icon"><svg aria-hidden="true"><use href="#i-tools"/></svg></span>
+          <span class="cat-name">Ustalar &amp; Tesisatçılar</span>
+          <span class="cat-desc">Tesisat, elektrik, çilingir</span>
+          <span class="cat-link">Hemen Göz At <svg aria-hidden="true"><use href="#i-arrow"/></svg></span>
+        </a></li>
+        <li><a class="cat-card" id="cat-kafe" href="#" data-soon="Kafe &amp; Restoranlar" style="--c:#b8641c;--c-bg:#fdf0e1">
+          <span class="cat-icon"><svg aria-hidden="true"><use href="#i-cafe"/></svg></span>
+          <span class="cat-name">Kafe &amp; Restoranlar</span>
+          <span class="cat-desc">Kahvaltı, kahve, akşam yemeği</span>
+          <span class="cat-link">Hemen Göz At <svg aria-hidden="true"><use href="#i-arrow"/></svg></span>
+        </a></li>
+        <li><a class="cat-card" id="cat-yardim" href="#" data-soon="Kayıp &amp; Yardımlaşma" style="--c:#d6457a;--c-bg:#fdebf2">
+          <span class="cat-icon"><svg aria-hidden="true"><use href="#i-paw"/></svg></span>
+          <span class="cat-name">Kayıp &amp; Yardımlaşma</span>
+          <span class="cat-desc">Kayıp dostlar, komşu desteği</span>
+          <span class="cat-link">Hemen Göz At <svg aria-hidden="true"><use href="#i-arrow"/></svg></span>
+        </a></li>
+        <li><a class="cat-card" id="cat-temizleme" href="#" data-soon="Kuru Temizleme" style="--c:#2e7fc1;--c-bg:#e6f1fb">
+          <span class="cat-icon"><svg aria-hidden="true"><use href="#i-hanger"/></svg></span>
+          <span class="cat-name">Kuru Temizleme</span>
+          <span class="cat-desc">Ütü, halı, perde yıkama</span>
+          <span class="cat-link">Hemen Göz At <svg aria-hidden="true"><use href="#i-arrow"/></svg></span>
+        </a></li>
+      </ul>
+    </div>
+  </section>
 
-  componentDidMount() {
-    const tryRender = () => {
-      if (this.widgetId || this.state.submitted) return;
-      const el = document.getElementById('cf-turnstile');
-      if (!el || typeof window.turnstile === 'undefined') {
-        setTimeout(tryRender, 50);
-        return;
-      }
-      this.widgetId = window.turnstile.render(el, {
-        sitekey: '0x4AAAAAAFSWfYcyHk899CeC',
-        action: 'subscribe',
-        callback: token => this.setState({ turnstileToken: token, error: '' }),
-        'error-callback': () => this.setState({ turnstileToken: '' }),
-        'expired-callback': () => this.setState({ turnstileToken: '' })
-      });
-    };
-    tryRender();
-  }
+  <!-- Ataşehir'de Popüler -->
+  <section class="section section-soft" id="populer" aria-labelledby="populer-title">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <h2 id="populer-title">Ataşehir'de Popüler</h2>
+          <p>Komşuların bu hafta en çok baktığı rehberler.</p>
+        </div>
+        <a class="link-more" href="#" data-soon="Tüm rehberler">Tümünü gör <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      </div>
 
-  renderVals() {
-    return {
-      showForm: this.props.showForm ?? true,
-      email: this.state.email,
-      submitted: this.state.submitted,
-      notSubmitted: !this.state.submitted,
-      onEmail: e => this.setState({ email: e.target.value }),
-      error: this.state.error,
-      loading: this.state.loading,
-      submitDisabled: this.state.loading || !this.state.turnstileToken,
-      onSubmit: async e => {
-        e.preventDefault();
-        if (!this.state.email || this.state.loading || !this.state.turnstileToken) return;
-        this.setState({ loading: true, error: '' });
-        const token = this.state.turnstileToken;
-        try {
-          const res = await fetch('/api/subscribe', {
-            method: 'POST',
-            headers: { 'content-type': 'application/json' },
-            body: JSON.stringify({ email: this.state.email, 'cf-turnstile-response': token })
-          });
-          if (!res.ok) throw new Error();
-          this.setState({ submitted: true, loading: false });
-        } catch {
-          this.setState({ loading: false, error: 'Bir sorun oluştu, lütfen tekrar deneyin.' });
-        } finally {
-          this.setState({ turnstileToken: '' });
-          if (this.widgetId && window.turnstile) window.turnstile.reset(this.widgetId);
-        }
-      }
-    };
-  }
-}
-</script>
+      <div class="pop-grid">
+        <article class="pop-card" style="--c:#0f8a87;--c-bg:#e3f6f5">
+          <div class="pop-media">
+            <svg class="pop-map" viewBox="0 0 320 170" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+              <use href="#map-base"/>
+              <use href="#i-pin" x="70" y="44" width="20" height="25" color="#14a3a0"/>
+              <use href="#i-pin" x="150" y="64" width="20" height="25" color="#14a3a0"/>
+              <use href="#i-pin" x="214" y="30" width="20" height="25" color="#14a3a0"/>
+              <use href="#i-pin" x="262" y="92" width="20" height="25" color="#14a3a0"/>
+              <use href="#i-pin" x="118" y="104" width="20" height="25" color="#14a3a0"/>
+            </svg>
+            <div class="pop-thumb" aria-hidden="true">
+              <svg viewBox="0 0 80 64"><rect width="80" height="64" fill="#e3f6f5"/><rect x="0" y="54" width="80" height="10" fill="#c9ecd8"/><rect x="14" y="24" width="52" height="32" rx="2" fill="#ffe0bf"/><path d="M10 26 40 10l30 16Z" fill="#e8701f"/><circle cx="40" cy="22" r="5" fill="#fff"/><path d="M40 19.5V22l2 1.2" stroke="#16244a" stroke-width="1.2" fill="none" stroke-linecap="round"/><rect x="34" y="40" width="12" height="16" rx="2" fill="#22356a"/><rect x="19" y="32" width="9" height="8" rx="1.5" fill="#fff"/><rect x="52" y="32" width="9" height="8" rx="1.5" fill="#fff"/><path d="M62 10v14" stroke="#16244a" stroke-width="1.5"/><path d="M62 10h10l-3 3 3 3H62Z" fill="#e8505b"/></svg>
+            </div>
+            <span class="pop-badge"><svg aria-hidden="true"><use href="#i-school"/></svg></span>
+          </div>
+          <div class="pop-body">
+            <h3>Ataşehir Özel Okulları</h3>
+            <p class="pop-count">24 Okul</p>
+            <p class="pop-tags">Anaokulu · İlkokul · Ortaokul · Lise</p>
+            <a class="pop-link" href="#" data-soon="Ataşehir Özel Okulları">Rehbere git <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          </div>
+        </article>
+
+        <article class="pop-card" style="--c:#e8701f;--c-bg:#fff1e6">
+          <div class="pop-media">
+            <svg class="pop-map" viewBox="0 0 320 170" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+              <use href="#map-base"/>
+              <use href="#i-pin" x="96" y="58" width="20" height="25" color="#ff8a3d"/>
+              <use href="#i-pin" x="124" y="70" width="20" height="25" color="#ff8a3d"/>
+              <use href="#i-pin" x="182" y="54" width="20" height="25" color="#ff8a3d"/>
+              <use href="#i-pin" x="236" y="40" width="20" height="25" color="#ff8a3d"/>
+              <use href="#i-pin" x="40" y="96" width="20" height="25" color="#ff8a3d"/>
+              <use href="#i-pin" x="268" y="104" width="20" height="25" color="#ff8a3d"/>
+            </svg>
+            <div class="pop-thumb" aria-hidden="true">
+              <svg viewBox="0 0 80 64"><rect width="80" height="64" fill="#fff1e6"/><rect x="8" y="14" width="64" height="50" rx="2" fill="#22356a"/><rect x="12" y="6" width="56" height="10" rx="2" fill="#16244a"/><text x="40" y="14" text-anchor="middle" font-size="6.5" font-weight="900" letter-spacing=".8" fill="#ffc93c" font-family="Nunito, Arial, sans-serif">KUYUMCU</text><rect x="14" y="24" width="34" height="28" rx="2" fill="#fff6e8"/><path d="M22 34h8l3 4-7 8-7-8Z" fill="#ff8a3d"/><circle cx="40" cy="42" r="4" fill="none" stroke="#ffc93c" stroke-width="2"/><rect x="54" y="24" width="12" height="40" rx="2" fill="#fff6e8" opacity=".5"/><rect x="0" y="58" width="80" height="6" fill="#ffd9b0"/></svg>
+            </div>
+            <span class="pop-badge"><svg aria-hidden="true"><use href="#i-gem"/></svg></span>
+          </div>
+          <div class="pop-body">
+            <h3>Ataşehir Kuyumcuları</h3>
+            <p class="pop-count">18 Mağaza</p>
+            <p class="pop-tags">Altın · Pırlanta · Saat · Tamir</p>
+            <a class="pop-link" href="#" data-soon="Ataşehir Kuyumcuları">Rehbere git <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          </div>
+        </article>
+
+        <article class="pop-card" style="--c:#22356a;--c-bg:#e8edf7">
+          <div class="pop-media">
+            <svg class="pop-map" viewBox="0 0 320 170" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+              <use href="#map-base"/>
+              <circle cx="160" cy="84" r="46" fill="#22356a" fill-opacity=".08" stroke="#22356a" stroke-opacity=".25" stroke-dasharray="4 4"/>
+              <use href="#i-pin" x="150" y="62" width="20" height="25" color="#22356a"/>
+              <use href="#i-pin" x="58" y="34" width="20" height="25" color="#22356a"/>
+              <use href="#i-pin" x="244" y="96" width="20" height="25" color="#22356a"/>
+            </svg>
+            <span class="pop-247">7/24 açık</span>
+            <span class="pop-badge"><svg aria-hidden="true"><use href="#i-key"/></svg></span>
+          </div>
+          <div class="pop-body">
+            <h3>Ataşehir Çilingirleri</h3>
+            <p class="pop-count">Acil Hizmet</p>
+            <p class="pop-tags">Kapı açma · Kilit değişimi · Oto anahtar</p>
+            <a class="pop-link" href="#" data-soon="Ataşehir Çilingirleri">Rehbere git <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bülten -->
+  <section class="section" aria-labelledby="bulten-title">
+    <div class="container">
+      <div class="newsletter">
+        <div class="newsletter-text">
+          <h2 id="bulten-title">Mahallenden haberdar ol</h2>
+          <p>Yeni açılan esnaflar, nöbetçi eczane güncellemeleri ve komşuluk duyuruları ayda birkaç kez e-postanda.</p>
+        </div>
+        <form class="newsletter-form" id="newsletter-form" novalidate>
+          <div class="newsletter-row">
+            <label class="sr-only" for="email">E-posta adresin</label>
+            <input id="email" name="email" type="email" required autocomplete="email" placeholder="E-posta adresin">
+            <button class="btn btn-orange" type="submit" disabled>Abone ol</button>
+          </div>
+          <div id="cf-turnstile" class="turnstile"></div>
+          <p class="form-msg" id="form-msg" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-brand">
+      <span class="brand-word">mahalle<span>.si</span></span>
+      <p>Mahallendeki her şey, komşuların gözünden. Şimdilik Ataşehir'deyiz.</p>
+    </div>
+    <nav aria-label="Keşfet">
+      <h3>Keşfet</h3>
+      <a href="#kesfet" data-focus="eczane">Nöbetçi Eczaneler</a>
+      <a href="#kesfet" data-focus="okul">Özel Okullar</a>
+      <a href="#kesfet" data-focus="usta">Ustalar</a>
+      <a href="#kesfet" data-focus="kafe">Kafe &amp; Restoranlar</a>
+    </nav>
+    <nav aria-label="Topluluk">
+      <h3>Topluluk</h3>
+      <a href="#" data-soon="İlanlar">İlanlar</a>
+      <a href="#kesfet" data-focus="yardim">Kayıp &amp; Yardımlaşma</a>
+      <a href="#" data-soon="Etkinlikler">Etkinlikler</a>
+    </nav>
+    <nav aria-label="mahalle.si">
+      <h3>mahalle.si</h3>
+      <a href="#" data-soon="İşletme kaydı">İşletmeni ekle</a>
+      <a href="mailto:merhaba@mahalle.si">merhaba@mahalle.si</a>
+    </nav>
+  </div>
+  <div class="container footer-bottom">
+    <span>© 2026 mahalle.si</span>
+    <span>Ataşehir, İstanbul'da sevgiyle yapıldı.</span>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onTurnstileLoad" async defer></script>
+<script src="app.js"></script>
 </body>
 </html>
