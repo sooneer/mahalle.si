@@ -241,7 +241,7 @@ const basHarf = (s) => s.toLocaleLowerCase("tr-TR")
 // "+902165771101" → "0216 577 11 01"
 const telefonYaz = (t) => t.replace(/^\+90(\d{3})(\d{3})(\d{2})(\d{2})$/, "0$1 $2 $3 $4");
 
-async function renderEczaneler(mahalle) {
+async function renderEczaneler(mahalle, ilce) {
   const data = await load(`/data/eczaneler/${mahalle.slug}.json`).catch(() => null);
   if (!data?.eczaneler.length) return 0;
 
@@ -265,9 +265,104 @@ async function renderEczaneler(mahalle) {
   }));
   const bolum = document.getElementById("eczaneler");
   bolum.hidden = false;
+  haritayiHazirla(mahalle, ilce, liste);
   // Bölüm veri gelince açıldığı için tarayıcı #eczaneler'e kendiliğinden kaymaz
   if (location.hash === "#eczaneler") requestAnimationFrame(() => bolum.scrollIntoView());
   return liste.length;
+}
+
+// --- Eczane haritası (MapLibre + OpenFreeMap) --------------------------------
+// Kütüphane ~800 KB; yalnızca bölüm görünüme yaklaşınca yüklenir.
+const MAPLIBRE = "https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl";
+const HARITA_STILI = "https://tiles.openfreemap.org/styles/positron";
+
+function maplibreYukle() {
+  if (window.maplibregl) return Promise.resolve();
+  document.head.append(h("link", { rel: "stylesheet", href: `${MAPLIBRE}.css` }));
+  return new Promise((resolve, reject) => {
+    document.head.append(Object.assign(h("script", { src: `${MAPLIBRE}.js` }), { onload: resolve, onerror: reject }));
+  });
+}
+
+function haritayiHazirla(mahalle, ilce, liste) {
+  const kutu = document.getElementById("eczane-harita");
+  const gozlemci = new IntersectionObserver((girdiler) => {
+    if (!girdiler.some((g) => g.isIntersecting)) return;
+    gozlemci.disconnect();
+    haritaCiz(kutu, mahalle, ilce, liste).catch((err) => {
+      console.error(err);
+      kutu.hidden = true; // liste zaten var, harita olmadan da sayfa eksiksiz
+    });
+  }, { rootMargin: "300px" });
+  gozlemci.observe(kutu);
+}
+
+async function haritaCiz(kutu, mahalle, ilce, liste) {
+  const [, sinirlar] = await Promise.all([
+    maplibreYukle(),
+    load(`/data/sinirlar/${ilce.slug}.json`).catch(() => null),
+  ]);
+  const sinir = sinirlar?.mahalleler.find((m) => m.slug === mahalle.slug);
+  const hareketsiz = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const noktalar = {
+    type: "FeatureCollection",
+    features: liste.map((e, i) => ({
+      type: "Feature", id: i,
+      geometry: { type: "Point", coordinates: [e.konum[1], e.konum[0]] },
+      properties: { i },
+    })),
+  };
+
+  // Görünüm: mahalle sınırı varsa onu, yoksa eczaneleri kapsasın
+  const tumKoordinatlar = sinir ? sinir.poligonlar.flatMap((p) => p[0]) : noktalar.features.map((f) => f.geometry.coordinates);
+  const sinirKutusu = tumKoordinatlar.reduce(([a, b, c, d], [x, y]) =>
+    [Math.min(a, x), Math.min(b, y), Math.max(c, x), Math.max(d, y)], [Infinity, Infinity, -Infinity, -Infinity]);
+
+  const harita = new maplibregl.Map({
+    container: kutu,
+    style: HARITA_STILI,
+    bounds: [[sinirKutusu[0], sinirKutusu[1]], [sinirKutusu[2], sinirKutusu[3]]],
+    fitBoundsOptions: { padding: 32 },
+    cooperativeGestures: true, // mobilde sayfa kaydırması haritaya takılmasın
+    fadeDuration: hareketsiz ? 0 : 300,
+    attributionControl: { compact: true },
+    locale: {
+      "CooperativeGesturesHandler.WindowsHelpText": "Yakınlaştırmak için Ctrl tuşuna basılı tutarak kaydır",
+      "CooperativeGesturesHandler.MacHelpText": "Yakınlaştırmak için ⌘ tuşuna basılı tutarak kaydır",
+      "CooperativeGesturesHandler.MobileHelpText": "Haritayı kaydırmak için iki parmak kullan",
+      "NavigationControl.ZoomIn": "Yakınlaştır",
+      "NavigationControl.ZoomOut": "Uzaklaştır",
+      "NavigationControl.ResetBearing": "Kuzeye döndür",
+    },
+  });
+  harita.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-right");
+
+  harita.on("load", () => {
+    if (sinir) {
+      harita.addSource("sinir", { type: "geojson", data: { type: "MultiPolygon", coordinates: sinir.poligonlar } });
+      harita.addLayer({ id: "sinir-dolgu", type: "fill", source: "sinir", paint: { "fill-color": "#14a3a0", "fill-opacity": 0.08 } });
+      harita.addLayer({ id: "sinir-cizgi", type: "line", source: "sinir", paint: { "line-color": "#0b7a77", "line-width": 2.5, "line-dasharray": [2, 1.5] } });
+    }
+    harita.addSource("eczaneler", { type: "geojson", data: noktalar });
+    harita.addLayer({
+      id: "eczane-nokta", type: "circle", source: "eczaneler",
+      paint: { "circle-radius": 8, "circle-color": "#e8505b", "circle-stroke-color": "#fff", "circle-stroke-width": 2.5 },
+    });
+  });
+
+  const popup = new maplibregl.Popup({ closeButton: true, offset: 12, maxWidth: "260px" });
+  harita.on("click", "eczane-nokta", (ev) => {
+    const e = liste[ev.features[0].properties.i];
+    popup.setLngLat(ev.features[0].geometry.coordinates)
+      .setDOMContent(h("div", { class: "harita-popup" },
+        h("strong", {}, basHarf(e.ad)),
+        h("span", {}, e.adres),
+        e.telefon && h("a", { href: `tel:${e.telefon}` }, telefonYaz(e.telefon))))
+      .addTo(harita);
+  });
+  harita.on("mouseenter", "eczane-nokta", () => { harita.getCanvas().style.cursor = "pointer"; });
+  harita.on("mouseleave", "eczane-nokta", () => { harita.getCanvas().style.cursor = ""; });
 }
 
 // --- Mahalle sayfası ---------------------------------------------------------
@@ -300,7 +395,7 @@ async function renderMahalle() {
   );
   document.getElementById("rehber-title").textContent = `${mahalle.ad} rehberi`;
 
-  const eczaneSayisi = await renderEczaneler(mahalle);
+  const eczaneSayisi = await renderEczaneler(mahalle, ilce);
   document.getElementById("kategoriler").append(...kategoriler.map((k) =>
     h("li", {}, h("a", {
       class: "cat-card", style: `--c:${k.renk};--c-bg:${k.zemin}`,

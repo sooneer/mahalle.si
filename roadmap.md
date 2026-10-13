@@ -225,6 +225,9 @@ Kaynak dosya: İstanbul'daki 5.934 eczane (GeoJSON), Ataşehir'de 172, Küçükb
 - [x] `atasehir.json` ve `slugs.json` slug'ları resmi listeye göre düzeltildi: `asikveysel` → `atasehir-asikveysel`, `ferhatpasa` → `atasehir-ferhatpasa`, `ornek` → `atasehir-ornek`, `atasehir-mustafa-kemal` → `mustafa-kemal`, `yeni-sahra` → `yenisahra`, `atasehir-mimarsinan` → `atasehir-mimar-sinan`. Ekrandaki adlar resmi yazıma çekildi ("Yenisahra", "Mimar Sinan").
 - [x] Mahalle sayfasında eczane listesi (`#eczaneler`): ad, adres, telefon (`tel:`), yol tarifi. Kart listeye kayar.
 - [ ] Eczane konumlarını SVG haritada nokta olarak göstermek.
+  - [x] Uygulandı: Küçükbakkalköy eczane bölümünde MapLibre GL 4.7.1 (jsDelivr) + OpenFreeMap `positron` haritası; mahalle sınırı kesikli turkuaz, eczaneler kırmızı nokta, tıklayınca ad/adres/telefon. Kütüphane (~800 KB) bölüm görünüme yaklaşınca yüklenir. OpenFreeMap vektör karo verdiği için Leaflet yerine MapLibre seçildi.
+  - İlk öneri: sokak haritası gerekirse **Leaflet (cdnjs) + OpenFreeMap** karoları. Ücretsiz, API anahtarı ve kart gerekmez, build'siz. Trafik büyürse Protomaps PMTiles dosyası R2'de barındırılır (kendi karomuz, dış bağımlılık yok). "Yol tarifi" butonu Google Maps linki olarak kalır.
+  - Elenen: Google Maps JavaScript API. Ücretsiz kota var ama faturalandırma hesabı (kredi kartı) zorunlu, kota aşılınca ücret çıkar, Google çerezleri KVKK/çerez onayı gerektirir. Maps Embed API ücretsiz ama kendi pinlerimizi koyamıyoruz (yalnızca Google'ın kendi aramasını gösterir). Google My Maps ücretsiz ama elle güncellenir.
 - [ ] `nightDuty`, `openingHour` ve `closingHour` alanları anlık veridir, statik dosyada bayatlar. Nöbetçi eczane bilgisi canlı kaynaktan (Worker + cache) çekilmeli.
 - [ ] Kaynağın lisansı (İBB Açık Veri?) ve atıf koşulu kontrol edilmeli.
 

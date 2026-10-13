@@ -171,3 +171,13 @@ a.plaka:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
 .kaynak { margin-top: 18px; font-size: 14px; color: var(--muted); }
 /* Kayıt sayısı gerçek veri: soluk değil, okunur renkte (kategori rengi koyulaştırılır) */
 .cat-link { opacity: 1; color: color-mix(in srgb, var(--c) 72%, #000); }
+
+/* Eczane haritası */
+.eczane-harita {
+  height: clamp(300px, 50vh, 460px); margin-bottom: 18px; overflow: hidden;
+  border-radius: var(--radius-sm); border: 1px solid var(--line); background: var(--soft);
+}
+.eczane-harita .maplibregl-popup-content { padding: 12px 14px; border-radius: 12px; font-family: inherit; box-shadow: var(--shadow-sm); }
+.harita-popup { display: grid; gap: 4px; font-size: 13px; line-height: 1.35; color: var(--muted); }
+.harita-popup strong { font-size: 14px; color: var(--navy); }
+.harita-popup a { font-weight: 800; color: var(--navy); }
