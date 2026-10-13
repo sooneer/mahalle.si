@@ -155,7 +155,9 @@ a.plaka:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
 }
 
 /* Eczane listesi */
-.eczane-section { padding-top: 0; }
+/* Kategori sayfası (eczaneler, okullar): başlıktan sonra harita hemen gelsin */
+.k-hero { padding-bottom: clamp(24px, 3vw, 36px); }
+.kategori-section { padding-top: clamp(20px, 3vw, 32px); }
 .eczane-list { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr)); gap: 14px; }
 .eczane {
   display: grid; grid-template-columns: auto 1fr; gap: 12px 14px; align-items: start;
@@ -181,3 +183,15 @@ a.plaka:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
 .harita-popup { display: grid; gap: 4px; font-size: 13px; line-height: 1.35; color: var(--muted); }
 .harita-popup strong { font-size: 14px; color: var(--navy); }
 .harita-popup a { font-weight: 800; color: var(--navy); }
+.harita-popup em { font-style: normal; font-size: 12px; color: var(--muted); }
+
+/* Özel okullar: eczane kartları okul rengiyle */
+.okul .eczane-icon { background: #e3f6f5; color: #0f8a87; }
+.okul-tur { display: inline-block; margin-top: 6px; padding: 2px 8px; border-radius: 999px; font-size: 12px; font-weight: 800; background: #e3f6f5; color: #0b6b69; }
+.okul-filtre { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+.okul-filtre button {
+  min-height: 40px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--line); background: #fff;
+  font: inherit; font-size: 14px; font-weight: 700; color: var(--navy); cursor: pointer;
+}
+.okul-filtre button[aria-pressed="true"] { background: #0b6b69; border-color: #0b6b69; color: #fff; }
+.okul-filtre small { margin-left: 4px; font-weight: 600; opacity: .75; }

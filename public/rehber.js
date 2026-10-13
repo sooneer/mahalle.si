@@ -234,21 +234,46 @@ async function renderIlce() {
   bindFilter(document.getElementById("q"), list, document.getElementById("bos"));
 }
 
-// --- Eczaneler ---------------------------------------------------------------
+// --- Kategori sayfaları ------------------------------------------------------
+// Her kategori kendi sayfasında: https://kucukbakkalkoy.mahalle.si/eczaneler
+// Yerelde: /istanbul/atasehir/kucukbakkalkoy/eczaneler. Harita kütüphanesi ve listeler yalnızca orada yüklenir,
+// mahalle sayfası yalnızca kartları gösterir. Hangi kategorinin sayfası olduğu mahalle JSON'undaki `sayfa` alanından okunur.
+const kategoriUrl = (il, ilce, mahalle, sayfa) =>
+  IS_PROD ? `https://${mahalle}.${ROOT_DOMAIN}/${sayfa}` : `/${il}/${ilce}/${mahalle}/${sayfa}`;
+
+// Kategori kartları: mahalle sayfasında hepsi, kategori sayfasında diğerleri
+function kategoriKartlari({ mahalle, ilce, il, kategoriler }) {
+  return kategoriler.map((k) => {
+    const acik = k.sayfa && k.kayitSayisi;
+    return h("li", {}, h("a", {
+      class: "cat-card", style: `--c:${k.renk};--c-bg:${k.zemin}`,
+      ...(acik
+        ? { href: kategoriUrl(il.slug, ilce.slug, mahalle.slug, k.sayfa) }
+        : { href: "#", "data-soon": k.ad, "data-soon-msg": `${mahalle.ad} için ${k.ad} rehberi hazırlanıyor.` }),
+    },
+      h("span", { class: "cat-icon" }, icon(k.ikon)),
+      h("span", { class: "cat-name" }, k.ad),
+      h("span", { class: "cat-desc" }, k.aciklama),
+      acik
+        ? h("span", { class: "cat-link" }, `${k.kayitSayisi} kayıt`, icon("i-arrow"))
+        : h("span", { class: "cat-state" }, icon("i-hourglass"), "Hazırlanıyor")));
+  });
+}
+
 // Kaynak veride adlar büyük harfle geliyor: "AKIN ECZANESİ" → "Akın Eczanesi"
 const basHarf = (s) => s.toLocaleLowerCase("tr-TR")
   .replace(/(^|[\s(/-])(\S)/g, (_, a, b) => a + b.toLocaleUpperCase("tr-TR"));
 // "+902165771101" → "0216 577 11 01"
 const telefonYaz = (t) => t.replace(/^\+90(\d{3})(\d{3})(\d{2})(\d{2})$/, "0$1 $2 $3 $4");
 
-async function renderEczaneler(mahalle, ilce) {
+// --- Eczaneler ---------------------------------------------------------------
+// Kategori sayfası çizicileri veri yoksa null, varsa sayfa başlığını ve özetini döner.
+async function cizEczaneler(mahalle, ilce) {
   const data = await load(`/data/eczaneler/${mahalle.slug}.json`).catch(() => null);
-  if (!data?.eczaneler.length) return 0;
+  if (!data?.eczaneler.length) return null;
 
   const liste = data.eczaneler;
-  document.getElementById("eczane-title").textContent = `${tamlayan(mahalle.ad)} eczaneleri`;
-  document.getElementById("eczane-lead").textContent = `${liste.length} eczane. Telefonla ara ya da yol tarifi al.`;
-  document.getElementById("eczane-list").append(...liste.map((e) => {
+  document.getElementById("liste").append(...liste.map((e) => {
     const [enlem, boylam] = e.konum;
     return h("li", { class: "eczane" },
       h("span", { class: "eczane-icon" }, icon("i-pharmacy")),
@@ -263,15 +288,84 @@ async function renderEczaneler(mahalle, ilce) {
           "aria-label": `${basHarf(e.ad)} için yol tarifi`,
         }, "Yol tarifi")));
   }));
-  const bolum = document.getElementById("eczaneler");
-  bolum.hidden = false;
-  haritayiHazirla(mahalle, ilce, liste);
-  // Bölüm veri gelince açıldığı için tarayıcı #eczaneler'e kendiliğinden kaymaz
-  if (location.hash === "#eczaneler") requestAnimationFrame(() => bolum.scrollIntoView());
-  return liste.length;
+  haritayiHazirla(document.getElementById("harita"), mahalle, ilce, liste, {
+    renk: "#e8505b",
+    popup: (e) => [h("strong", {}, basHarf(e.ad)), h("span", {}, e.adres),
+      e.telefon && h("a", { href: `tel:${e.telefon}` }, telefonYaz(e.telefon))],
+  });
+  document.getElementById("kaynak").textContent = "Bu listede nöbet bilgisi yok. Gece ya da tatil günü gitmeden önce eczaneyi telefonla ara.";
+  return { baslik: `${tamlayan(mahalle.ad)} eczaneleri`, ozet: `${liste.length} eczane. Telefonla ara ya da yol tarifi al.` };
 }
 
-// --- Eczane haritası (MapLibre + OpenFreeMap) --------------------------------
+// --- Özel okullar ------------------------------------------------------------
+// MEB türü → kademe: "Özel Türk Okul Öncesi Kurumu" → "Anaokulu"
+// (regex'in /i bayrağı "İ"yi "i" saymaz, bu yüzden önce Türkçe küçük harfe çevrilir)
+const KADEMELER = [
+  ["Anaokulu", /okul öncesi|anaokulu/],
+  ["İlkokul", /ilkokul/],
+  ["Ortaokul", /ortaokul/],
+  ["Lise", /lise|ortaöğretim/],
+];
+const kademe = (tur) => KADEMELER.find(([, re]) => re.test(tur.toLocaleLowerCase("tr-TR")))?.[0] ?? "Diğer";
+// "(MBA)" gibi kısaltmalar basHarf'ten sonra yine büyük harf kalsın
+const okulAdi = (ad) => basHarf(ad).replace(/\(([^)]{1,4})\)/g, (_, k) => `(${k.toLocaleUpperCase("tr-TR")})`);
+// "KÜÇÜKBAKKALKÖY MAH. KAZIM PAŞA SK. NO: 12 ATAŞEHİR / İSTANBUL" → "Küçükbakkalköy Mah. Kazım Paşa Sk. No: 12"
+const okulAdresi = (adres) => basHarf(adres.replace(/\s*ATAŞEHİR\s*\/\s*İSTANBUL/, ""))
+  .replace(/(\d)(\p{Ll})\b/gu, (_, r, h) => r + h.toLocaleUpperCase("tr-TR")); // "21a" → "21A"
+// Yalnızca sokağı bilinen okulda koordinat sokağın ortası; yol tarifi adresle aranır.
+const yolTarifi = (o) => "https://www.google.com/maps/dir/?api=1&destination=" +
+  (o.konumHassasiyeti === "bina" ? o.konum.join(",") : encodeURIComponent(`${okulAdi(o.ad)}, ${o.adres}`));
+
+async function cizOkullar(mahalle, ilce) {
+  const data = await load(`/data/okullar/${mahalle.slug}.json`).catch(() => null);
+  if (!data?.okullar.length) return null;
+
+  const liste = data.okullar.map((o) => ({ ...o, kademe: kademe(o.tur) }));
+  const ogeler = liste.map((o) => h("li", { class: "eczane okul", "data-kademe": o.kademe },
+    h("span", { class: "eczane-icon" }, icon("i-school")),
+    h("div", { class: "eczane-body" },
+      h("h3", {}, okulAdi(o.ad)),
+      h("p", {}, okulAdresi(o.adres)),
+      h("span", { class: "okul-tur" }, o.kademe)),
+    h("div", { class: "eczane-actions" },
+      o.telefon && h("a", { class: "btn btn-soft", href: `tel:${o.telefon}` }, telefonYaz(o.telefon)),
+      h("a", {
+        class: "btn btn-soft", target: "_blank", rel: "noopener", href: yolTarifi(o),
+        "aria-label": `${okulAdi(o.ad)} için yol tarifi`,
+      }, "Yol tarifi"))));
+  document.getElementById("liste").append(...ogeler);
+
+  const harita = haritayiHazirla(document.getElementById("harita"), mahalle, ilce, liste.filter((o) => o.konum), {
+    renk: "#0f8a87",
+    yaklasik: (o) => o.konumHassasiyeti !== "bina",
+    popup: (o) => [h("strong", {}, okulAdi(o.ad)), h("span", {}, `${o.kademe} · ${okulAdresi(o.adres)}`),
+      o.konumHassasiyeti !== "bina" && h("em", {}, "Konum yaklaşık: yalnızca sokak biliniyor."),
+      o.telefon && h("a", { href: `tel:${o.telefon}` }, telefonYaz(o.telefon))],
+  });
+
+  // Kademe süzgeci: listeyi ve haritadaki noktaları birlikte süzer
+  const sayilar = Object.fromEntries(KADEMELER.map(([k]) => [k, liste.filter((o) => o.kademe === k).length]));
+  const secenekler = [["Tümü", liste.length], ...Object.entries(sayilar).filter(([, n]) => n)];
+  const filtre = document.getElementById("filtre");
+  filtre.setAttribute("aria-label", "Kademeye göre süz");
+  const sec = (secilen) => {
+    filtre.querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.kademe === secilen)));
+    ogeler.forEach((li) => { li.hidden = secilen !== "Tümü" && li.dataset.kademe !== secilen; });
+    harita.suz(secilen === "Tümü" ? null : (o) => o.kademe === secilen);
+  };
+  filtre.append(...secenekler.map(([k, n]) =>
+    h("button", { type: "button", "data-kademe": k, "aria-pressed": String(k === "Tümü") }, k, h("small", {}, String(n)))));
+  filtre.addEventListener("click", (e) => { const b = e.target.closest("button"); if (b) sec(b.dataset.kademe); });
+  filtre.hidden = false;
+
+  document.getElementById("kaynak").textContent = "Kaynak: MEB özel öğretim kurumları listesi. Haritada içi boş daireyle gösterilen okulların yalnızca sokağı biliniyor, konum yaklaşık. Konumlar © OpenStreetMap katkıcıları.";
+  return { baslik: `${tamlayan(mahalle.ad)} özel okulları`, ozet: `${liste.length} özel okul, anaokulundan liseye. Telefonla ara ya da yol tarifi al.` };
+}
+
+// Sayfa slug'ı → çizici. Yeni kategori: buraya ekle, mahalle JSON'unda kategoriye `sayfa` ver, worker.js'te KATEGORI_SAYFALARI'na ekle.
+const CIZICILER = { eczaneler: cizEczaneler, okullar: cizOkullar };
+
+// --- Harita (MapLibre + OpenFreeMap) -----------------------------------------
 // Kütüphane ~800 KB; yalnızca bölüm görünüme yaklaşınca yüklenir.
 const MAPLIBRE = "https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl";
 const HARITA_STILI = "https://tiles.openfreemap.org/styles/positron";
@@ -284,20 +378,23 @@ function maplibreYukle() {
   });
 }
 
-function haritayiHazirla(mahalle, ilce, liste) {
-  const kutu = document.getElementById("eczane-harita");
+// secenekler: renk (nokta rengi), popup(kayıt) → popup içeriği, yaklasik(kayıt) → içi boş nokta.
+// Dönen nesnenin suz(fn) metodu noktaları süzer (null: hepsi); harita henüz çizilmediyse çizilince uygulanır.
+function haritayiHazirla(kutu, mahalle, ilce, liste, secenekler) {
+  const durum = { suzgec: null, uygula: null };
   const gozlemci = new IntersectionObserver((girdiler) => {
     if (!girdiler.some((g) => g.isIntersecting)) return;
     gozlemci.disconnect();
-    haritaCiz(kutu, mahalle, ilce, liste).catch((err) => {
+    haritaCiz(kutu, mahalle, ilce, liste, secenekler, durum).catch((err) => {
       console.error(err);
       kutu.hidden = true; // liste zaten var, harita olmadan da sayfa eksiksiz
     });
   }, { rootMargin: "300px" });
   gozlemci.observe(kutu);
+  return { suz(fn) { durum.suzgec = fn; durum.uygula?.(); } };
 }
 
-async function haritaCiz(kutu, mahalle, ilce, liste) {
+async function haritaCiz(kutu, mahalle, ilce, liste, { renk, popup: popupIcerik, yaklasik = () => false }, durum) {
   const [, sinirlar] = await Promise.all([
     maplibreYukle(),
     load(`/data/sinirlar/${ilce.slug}.json`).catch(() => null),
@@ -310,11 +407,11 @@ async function haritaCiz(kutu, mahalle, ilce, liste) {
     features: liste.map((e, i) => ({
       type: "Feature", id: i,
       geometry: { type: "Point", coordinates: [e.konum[1], e.konum[0]] },
-      properties: { i },
+      properties: { i, yaklasik: yaklasik(e) },
     })),
   };
 
-  // Görünüm: mahalle sınırı varsa onu, yoksa eczaneleri kapsasın
+  // Görünüm: mahalle sınırı varsa onu, yoksa noktaları kapsasın
   const tumKoordinatlar = sinir ? sinir.poligonlar.flatMap((p) => p[0]) : noktalar.features.map((f) => f.geometry.coordinates);
   const sinirKutusu = tumKoordinatlar.reduce(([a, b, c, d], [x, y]) =>
     [Math.min(a, x), Math.min(b, y), Math.max(c, x), Math.max(d, y)], [Infinity, Infinity, -Infinity, -Infinity]);
@@ -344,25 +441,34 @@ async function haritaCiz(kutu, mahalle, ilce, liste) {
       harita.addLayer({ id: "sinir-dolgu", type: "fill", source: "sinir", paint: { "fill-color": "#14a3a0", "fill-opacity": 0.08 } });
       harita.addLayer({ id: "sinir-cizgi", type: "line", source: "sinir", paint: { "line-color": "#0b7a77", "line-width": 2.5, "line-dasharray": [2, 1.5] } });
     }
-    harita.addSource("eczaneler", { type: "geojson", data: noktalar });
+    harita.addSource("noktalar", { type: "geojson", data: noktalar });
     harita.addLayer({
-      id: "eczane-nokta", type: "circle", source: "eczaneler",
-      paint: { "circle-radius": 8, "circle-color": "#e8505b", "circle-stroke-color": "#fff", "circle-stroke-width": 2.5 },
+      id: "nokta", type: "circle", source: "noktalar",
+      // Yaklaşık konum içi boş daire: sokak biliniyor, bina bilinmiyor
+      paint: {
+        "circle-radius": 8,
+        "circle-color": ["case", ["get", "yaklasik"], "#fff", renk],
+        "circle-stroke-color": ["case", ["get", "yaklasik"], renk, "#fff"],
+        "circle-stroke-width": 2.5,
+      },
     });
+    durum.uygula = () => {
+      const gorunen = liste.flatMap((e, i) => (!durum.suzgec || durum.suzgec(e) ? [i] : []));
+      harita.setFilter("nokta", durum.suzgec ? ["in", ["get", "i"], ["literal", gorunen]] : null);
+      popup.remove();
+    };
+    if (durum.suzgec) durum.uygula();
   });
 
   const popup = new maplibregl.Popup({ closeButton: true, offset: 12, maxWidth: "260px" });
-  harita.on("click", "eczane-nokta", (ev) => {
+  harita.on("click", "nokta", (ev) => {
     const e = liste[ev.features[0].properties.i];
     popup.setLngLat(ev.features[0].geometry.coordinates)
-      .setDOMContent(h("div", { class: "harita-popup" },
-        h("strong", {}, basHarf(e.ad)),
-        h("span", {}, e.adres),
-        e.telefon && h("a", { href: `tel:${e.telefon}` }, telefonYaz(e.telefon))))
+      .setDOMContent(h("div", { class: "harita-popup" }, popupIcerik(e)))
       .addTo(harita);
   });
-  harita.on("mouseenter", "eczane-nokta", () => { harita.getCanvas().style.cursor = "pointer"; });
-  harita.on("mouseleave", "eczane-nokta", () => { harita.getCanvas().style.cursor = ""; });
+  harita.on("mouseenter", "nokta", () => { harita.getCanvas().style.cursor = "pointer"; });
+  harita.on("mouseleave", "nokta", () => { harita.getCanvas().style.cursor = ""; });
 }
 
 // --- Mahalle sayfası ---------------------------------------------------------
@@ -383,6 +489,10 @@ async function renderMahalle() {
   }
 
   const { mahalle, ilce, il, kategoriler } = data;
+  // Eski bağlantılar (#eczaneler, #okullar) kategori sayfasına gider
+  const eskiBolum = kategoriler.find((k) => k.sayfa && `#${k.sayfa}` === location.hash);
+  if (eskiBolum) { location.replace(kategoriUrl(il.slug, ilce.slug, mahalle.slug, eskiBolum.sayfa)); return; }
+
   document.title = `${mahalle.ad} Mahalle Rehberi · ${ilce.ad} · mahalle.si`;
   // Ana sayfadaki "Son baktığın" kısayolu için
   try {
@@ -394,21 +504,7 @@ async function renderMahalle() {
     h("h1", { id: "hero-title" }, `${bulunma(mahalle.ad)} `, h("span", { class: "hl" }, "ne arıyorsun?")),
   );
   document.getElementById("rehber-title").textContent = `${mahalle.ad} rehberi`;
-
-  const eczaneSayisi = await renderEczaneler(mahalle, ilce);
-  document.getElementById("kategoriler").append(...kategoriler.map((k) =>
-    h("li", {}, h("a", {
-      class: "cat-card", style: `--c:${k.renk};--c-bg:${k.zemin}`,
-      ...(k.id === "eczane" && eczaneSayisi
-        ? { href: "#eczaneler" }
-        : { href: "#", "data-soon": k.ad, "data-soon-msg": `${mahalle.ad} için ${k.ad} rehberi hazırlanıyor.` }),
-    },
-      h("span", { class: "cat-icon" }, icon(k.ikon)),
-      h("span", { class: "cat-name" }, k.ad),
-      h("span", { class: "cat-desc" }, k.aciklama),
-      k.kayitSayisi == null
-        ? h("span", { class: "cat-state" }, icon("i-hourglass"), "Hazırlanıyor")
-        : h("span", { class: "cat-link" }, `${k.kayitSayisi} kayıt`, icon("i-arrow"))))));
+  document.getElementById("kategoriler").append(...kategoriKartlari(data));
 
   // Aynı ilçedeki diğer mahalleler
   const ilceData = await load(`/data/ilceler/${ilce.slug}.json`).catch(() => null);
@@ -422,7 +518,50 @@ async function renderMahalle() {
   }
 }
 
-const PAGES = { il: renderIl, ilce: renderIlce, mahalle: renderMahalle };
+// --- Kategori sayfası (eczaneler, okullar) -----------------------------------
+async function renderKategori() {
+  const slug = currentSlug(2, "kucukbakkalkoy");
+  const sayfa = location.pathname.split("/").filter(Boolean).at(-1);
+  setBrandSub(slug);
+  const hero = document.getElementById("hero");
+
+  const data = await load(`/data/mahalleler/${slug}.json`).catch(() => null);
+  const kategori = data?.kategoriler.find((k) => k.sayfa === sayfa);
+  const sonuc = kategori && CIZICILER[sayfa] ? await CIZICILER[sayfa](data.mahalle, data.ilce) : null;
+
+  if (!sonuc) {
+    document.title = "Sayfa hazırlanıyor · mahalle.si";
+    hero.append(h("h1", { id: "hero-title" }, "Bu sayfa hazırlanıyor"));
+    document.querySelector(".kategori-section .container").replaceChildren(
+      pendingBlock("Durum", "Bu rehber henüz açılmadı. Açıldığında ilk sen haberdar ol."));
+    document.querySelectorAll("[data-only-active]").forEach((el) => { el.hidden = !data; });
+    if (data) kategoriBaglantilari(data, null);
+    return;
+  }
+
+  const { mahalle, ilce, il } = data;
+  document.title = `${sonuc.baslik} · ${ilce.ad} · mahalle.si`;
+  hero.append(
+    crumbs([["Türkiye", homeUrl], [il.ad, placeUrl(il.slug)], [ilce.ad, placeUrl(il.slug, ilce.slug)],
+      [mahalle.ad, placeUrl(il.slug, ilce.slug, mahalle.slug)], [kategori.ad]]),
+    h("h1", { id: "hero-title" }, sonuc.baslik),
+    h("p", { class: "page-lead" }, sonuc.ozet),
+  );
+  document.getElementById("harita").setAttribute("aria-label", `${sonuc.baslik} haritası. Aynı bilgiler aşağıdaki listede de var.`);
+  kategoriBaglantilari(data, kategori);
+}
+
+// Kategori sayfasının altında mahallenin diğer kategorileri
+function kategoriBaglantilari(data, mevcut) {
+  const { mahalle, ilce, il } = data;
+  document.getElementById("diger-title").textContent = `${mahalle.ad} rehberi`;
+  document.getElementById("mahalle-link").href = placeUrl(il.slug, ilce.slug, mahalle.slug);
+  document.getElementById("kategoriler").append(...kategoriKartlari({
+    ...data, kategoriler: data.kategoriler.filter((k) => k !== mevcut),
+  }));
+}
+
+const PAGES = { il: renderIl, ilce: renderIlce, mahalle: renderMahalle, kategori: renderKategori };
 PAGES[document.body.dataset.page]().catch((err) => {
   console.error(err);
   toast("Veri yüklenemedi. Sayfayı bir sunucu üzerinden açtığından emin ol (npx wrangler dev).");

@@ -83,6 +83,9 @@ export default {
 const ROOT_DOMAIN = "mahalle.si";
 const PAGE_BY_DEPTH = ["/il", "/ilce", "/mahalle"]; // il.html, ilce.html, mahalle.html
 const PAGE_BY_TYPE = { il: "/il", ilce: "/ilce", mahalle: "/mahalle" };
+// Mahallenin kategori sayfaları (kategori.html): kucukbakkalkoy.mahalle.si/eczaneler
+// Yeni kategori: buraya, public/rehber.js CIZICILER'e ve mahalle JSON'unda kategoriye `sayfa` olarak ekle.
+const KATEGORI_SAYFALARI = new Set(["eczaneler", "okullar"]);
 const SLUG_RE = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 
 async function loadSlugs(url, env) {
@@ -103,24 +106,31 @@ async function routePlace(url, request, env) {
   const sub = host.endsWith("." + ROOT_DOMAIN) ? host.slice(0, -ROOT_DOMAIN.length - 1) : "";
 
   // Subdomain: sayfa türü slug haritasından bulunur
+  const notFound = () => new Response("Bu adreste bir yer bulunamadı.", { status: 404, headers: { "content-type": "text/plain; charset=utf-8" } });
+
   if (sub && sub !== "www") {
-    if (url.pathname !== "/") return null; // /data, /img, /styles.css vb. doğrudan Assets'ten
+    const kategori = url.pathname.replace(/^\/|\/$/g, "");
+    // /data, /img, /styles.css vb. doğrudan Assets'ten
+    if (url.pathname !== "/" && !KATEGORI_SAYFALARI.has(kategori)) return null;
     const place = (await loadSlugs(url, env))[sub];
-    if (!place) return new Response("Bu adreste bir yer bulunamadı.", { status: 404, headers: { "content-type": "text/plain; charset=utf-8" } });
+    if (!place) return notFound();
+    if (kategori) return place.tur === "mahalle" ? servePage("/kategori", url, request, env) : notFound();
     return servePage(PAGE_BY_TYPE[place.tur], url, request, env);
   }
 
-  // Klasör yolu: /istanbul, /istanbul/atasehir, /istanbul/atasehir/kucukbakkalkoy
+  // Klasör yolu: /istanbul, /istanbul/atasehir, /istanbul/atasehir/kucukbakkalkoy[/eczaneler]
   const segs = url.pathname.split("/").filter(Boolean);
-  if (segs.length < 1 || segs.length > 3 || !segs.every((s) => SLUG_RE.test(s))) return null;
+  if (segs.length < 1 || segs.length > 4 || !segs.every((s) => SLUG_RE.test(s))) return null;
   if (["data", "img", "api"].includes(segs[0])) return null;
+  const kategori = segs.length === 4 ? segs.pop() : null;
+  if (kategori && !KATEGORI_SAYFALARI.has(kategori)) return null;
 
   if (isProd) {
     const place = (await loadSlugs(url, env))[segs.at(-1)];
     if (place && place.yol.join("/") === segs.join("/")) {
-      return Response.redirect(`https://${segs.at(-1)}.${ROOT_DOMAIN}/`, 301);
+      return Response.redirect(`https://${segs.at(-1)}.${ROOT_DOMAIN}/${kategori ?? ""}`, 301);
     }
     return null;
   }
-  return servePage(PAGE_BY_DEPTH[segs.length - 1], url, request, env);
+  return servePage(kategori ? "/kategori" : PAGE_BY_DEPTH[segs.length - 1], url, request, env);
 }

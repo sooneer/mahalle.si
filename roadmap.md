@@ -231,6 +231,20 @@ Kaynak dosya: İstanbul'daki 5.934 eczane (GeoJSON), Ataşehir'de 172, Küçükb
 - [ ] `nightDuty`, `openingHour` ve `closingHour` alanları anlık veridir, statik dosyada bayatlar. Nöbetçi eczane bilgisi canlı kaynaktan (Worker + cache) çekilmeli.
 - [ ] Kaynağın lisansı (İBB Açık Veri?) ve atıf koşulu kontrol edilmeli.
 
+### Öneri: Okul verisi (adres → konum)
+Kaynak: il geneli özel okul listesi (HTML tablo: ilçe, ad, tür, adres, telefon; konum yok). Şimdilik yalnızca Ataşehir (163 okul) işleniyor, Küçükbakkalköy (35 okul) yayında.
+- [x] **Mahalle adresten okunur, konumdan değil.** `scripts/okul-donustur.js`: "MAH.", "MAHALLESİ", "MAHHALLESİ" ve başında ilçe adı olan biçimler ("ATAŞEHİR FERHATPAŞA MAH.") tanınıyor. Çıktı `public/data/okullar/<mahalle>.json`, yayınlanacak mahalleler betikteki `MAHALLELER` dizisinde.
+- [ ] Mahalle adları henüz `ilce-mahalle.json` ile eşleştirilmiyor, yalnızca adres metni kullanılıyor. Başka mahalle açılırken eklenmeli.
+- [x] **Harita pini için geocoding:** `scripts/okul-konum.js` Nominatim ile sırayla okul adı → sokak + kapı no → yalnızca sokak dener. Küçükbakkalköy: 24 okul bina düzeyinde, 11 okul yalnızca sokak düzeyinde bulundu.
+- [x] **Doğrulama:** Mahalle sınırı dışındaki sonuç atılır. Ad eşleşmesinde OSM adının ayırt edici kelimelerinin hepsi okul adında geçmeli ("Beyaz İnci" ≠ "Beyaz"). Zincir okulun farklı sokaktaki şubesi, adresindeki sokağa 150 m'den uzaksa kampüse bağlanmaz. Sonuçlar `data/okul-konum.json`'da saklanır, elle düzeltilebilir.
+- [x] Okullar sayfası (`kucukbakkalkoy.mahalle.si/okullar`): harita (sokak düzeyindekiler içi boş daire), kademe süzgeci (Anaokulu, İlkokul, Ortaokul, Lise), telefon ve yol tarifi. Ana sayfadaki "Özel Okullar" kartı ve popüler kart (35 Okul) bu sayfaya bağlı.
+- [x] Eczaneler ve okullar ayrı sayfalara taşındı (`/eczaneler`, `/okullar`, `kategori.html`). Mahalle sayfası artık yalnızca kategori kartlarını gösteriyor, harita kütüphanesini (~800 KB) yüklemiyor. Eski `#eczaneler` / `#okullar` bağlantıları yeni sayfaya yönlendiriliyor.
+- [ ] Kart sayıları (`kayitSayisi`) mahalle JSON'unda elle yazılı. Betikler (`eczane-bol.js`, `okul-donustur.js`) veri değişince bu sayıyı kendiliğinden güncellemeli.
+- [ ] Sokak düzeyindeki 11 okulun konumu elle doğrulanmalı. `data/` gitignore'da olduğu için `okul-konum.json` düzeltmeleri repoya girmiyor, kalıcı olması için dosya repoya alınmalı.
+- [ ] Devlet okulları listede yok. Kart "Özel Okullar" olarak adlandırıldı, devlet okulları için ayrı kaynak gerekir.
+- [ ] Elenen: Google Geocoding API. Kullanım şartları sonucun Google dışı haritada (MapLibre) gösterilmesini ve kalıcı saklanmasını yasaklıyor.
+- [ ] Kaynağın kullanım koşulları (MEB?) kontrol edilmeli. Adresler dış servise gönderilmeden önce onay alınmalı.
+
 ### Faz 5: Genişleme
 - [ ] Ataşehir'in diğer mahalleleri sırayla açılır (yalnızca `is_active` güncellemesi).
 - [ ] Komşu ilçeler (Kadıköy, Üsküdar...) açılır.

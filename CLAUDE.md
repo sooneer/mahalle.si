@@ -13,6 +13,7 @@ Paket ve build adımı yok. Sade HTML, CSS ve JS kullanılıyor, Cloudflare Work
   - `img/hero-scene.svg` hero mahalle illüstrasyonu. Animasyonları dosyanın içindeki `<style>`'da.
 - `src/worker.js` Worker. `/data`, `/img`, `.css` ve `.js` dışındaki istekler Worker'a gelir (`run_worker_first`).
   - `routePlace` il/ilçe/mahalle sayfalarını sunar. `YONLENDIRME=subdomain` (yayın): `atasehir.mahalle.si`. `YONLENDIRME=klasor` (yerel, `.dev.vars`): `/istanbul/atasehir`.
+  - Kategori sayfaları (`kategori.html`, `KATEGORI_SAYFALARI`): `kucukbakkalkoy.mahalle.si/eczaneler`, yerelde `/istanbul/atasehir/kucukbakkalkoy/okullar`. Harita ve listeler yalnızca bu sayfalarda yüklenir. Yeni kategori için üç yer: `KATEGORI_SAYFALARI`, `rehber.js` `CIZICILER`, mahalle JSON'unda kategorinin `sayfa` alanı.
   - `POST /api/subscribe` sırasıyla Turnstile doğrular, e-postayı doğrular ve D1'e `INSERT OR IGNORE` ile yazar.
 - `schema.sql` D1 şeması (`subscribers` tablosu).
 - `wrangler.jsonc` Worker `mahalle-si`, D1 binding `DB` (`mahalle-si-emails`), custom domain `mahalle.si`.
@@ -24,6 +25,8 @@ cp .dev.vars.example .dev.vars        # ilk kurulumda bir kez (klasör modunu a�
 npx wrangler dev                       # yerel önizleme (http://localhost:8787/istanbul/atasehir/kucukbakkalkoy)
 npx wrangler deploy                    # yayına alma
 node scripts/eczane-bol.js             # data/eczane.json → public/data/eczaneler/<mahalle>.json
+node scripts/okul-konum.js KÜÇÜKBAKKALKÖY  # okul konumları (Nominatim) → data/okul-konum.json, okul-donustur'dan önce
+node scripts/okul-donustur.js          # data/ozel-okul.html → data/ozel-okul.json + public/data/okullar/<mahalle>.json
 node scripts/mahalle-sinir.js ATAŞEHİR  # OSM mahalle sınırları → data/osm-atasehir.geojson (Nominatim, yavaş: 1 istek/sn)
 node scripts/sinir-yayinla.js          # data/osm-*.geojson → public/data/sinirlar/ (konumla mahalle bulma)
 npx wrangler d1 execute mahalle-si-emails --remote --file=schema.sql

@@ -87,7 +87,9 @@ searchForm.addEventListener("submit", (e) => {
   if (id) {
     const card = focusCategory(id);
     const name = card.querySelector(".cat-name").textContent;
-    toast(`“${query}” için ${name} rehberi çok yakında burada.`);
+    // Rehberi hazır kategoride kart gerçek bir sayfaya bağlı: oraya git
+    if (card.getAttribute("href") !== "#") location.href = card.href;
+    else toast(`“${query}” için ${name} rehberi çok yakında burada.`);
   } else {
     toast(`“${query}” için henüz içerik yok, yakında ekleyeceğiz.`);
   }
