@@ -1,0 +1,11 @@
+{"mahalle":"nuripasa","eczaneler":[
+{"id":33278,"ad":"BULVAR ECZANESİ","adres":"Nuripaşa Mahallesi, 58. Bulvar Caddesi, No:132/B","telefon":"+902126658434","konum":[40.98680747658208,28.904142004445685]},
+{"id":6998,"ad":"HÜLYA ECZANESİ","adres":"Nuripaşa Mahallesi, Merv Caddesi, No:6/C","telefon":"+902125825820","konum":[40.98840500011982,28.9033299995122]},
+{"id":32102,"ad":"İSTASYON ECZANESİ","adres":"Nuripaşa Mahallesi, 58. Bulvar Caddesi, 150/A","telefon":"+902124161649","konum":[40.98583899975193,28.904148000541895]},
+{"id":10978,"ad":"KARADENİZ ECZANESİ","adres":"Nuripaşa Mahallesi, Bekir Subaşı Sokak, 14","telefon":"+902124162346","konum":[40.987627324207374,28.900994607337992]},
+{"id":12830,"ad":"SAADET ECZANESİ","adres":"Nuripaşa Mahallesi, Şehit Cem Akgün Sokak, No:2/A","telefon":"+902128771262","konum":[40.98820582646201,28.89921137093135]},
+{"id":17042,"ad":"SELİM ECZANESİ","adres":"Nuripaşa Mahallesi, 14. Sokak, 58","telefon":"+902126793227","konum":[40.98573287999321,28.90091770424674]},
+{"id":23804,"ad":"SEYHUN ECZANESİ","adres":"Nuripaşa Mahallesi, Şehit Cem Akgün Sokak, 59/B","telefon":"+908032","konum":[40.98700861781547,28.899264467134756]},
+{"id":17564,"ad":"TUĞBA ECZANESİ","adres":"Nuripaşa Mahallesi, 14. Sokak, 51/B","telefon":"+902125825836","konum":[40.98558575953931,28.900678630589454]},
+{"id":14882,"ad":"ZEREN ECZANESİ","adres":"Nuripaşa Mahallesi, Merv Caddesi, 76","telefon":"+902124159220","konum":[40.987716015847276,28.898973797240572]}
+]}

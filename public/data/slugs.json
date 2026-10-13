@@ -1,0 +1,417 @@
+{
+ "istanbul": {
+  "tur": "il",
+  "yol": [
+   "istanbul"
+  ]
+ },
+ "adalar": {
+  "tur": "ilce",
+  "yol": [
+   "istanbul",
+   "adalar"
+  ]
+ },
+ "arnavutkoy": {
+  "tur": "ilce",
+  "yol": [
+   "istanbul",
+   "arnavutkoy"
+  ]
+ },
+ "atasehir": {
+  "tur": "ilce",
+  "yol": [
+   "istanbul",
+   "atasehir"
+  ]
+ },
+ "avcilar": {
+  "tur": "ilce",
+  "yol": [
+   "istanbul",
+   "avcilar"
+  ]
+ },
+ "bagcilar": {
+  "tur": "ilce",
+  "yol": [
+   "istanbul",
+   "bagcilar"
+  ]
+ },
+ "bahcelievler": {
+  "tur": "ilce",
+  "yol": [
+   "istanbul",
+   "bahcelievler"
+  ]
+ },
+ "bakirkoy": {
+  "tur": "ilce",
+  "yol": [
+   "istanbul",
+   "bakirkoy"
+  ]
+ },
+ "basaksehir": {
+  "tur": "ilce",
+  "yol": [
+   "istanbul",
+   "basaksehir"
+  ]
+ },
+ "bayrampasa": {
+  "tur": "ilce",
+  "yol": [
+   "istanbul",
+   "bayrampasa"
+  ]
+ },
+ "besiktas": {
+  "tur": "ilce",
+  "yol": [
+   "istanbul",
+   "besiktas"
+  ]
+ },
+ "beykoz": {
+  "tur": "ilce",
+  "yol": [
+   "istanbul",
+   "beykoz"
+  ]
+ },
+ "beylikduzu": {
+  "tur": "ilce",
+  "yol": [
+   "istanbul",
+   "beylikduzu"
+  ]
+ },
+ "beyoglu": {
+  "tur": "ilce",
+  "yol": [
+   "istanbul",
+   "beyoglu"
+  ]
+ },
+ "buyukcekmece": {
+  "tur": "ilce",
+  "yol": [
+   "istanbul",
+   "buyukcekmece"
+  ]
+ },
+ "catalca": {
+  "tur": "ilce",
+  "yol": [
+   "istanbul",
+   "catalca"
+  ]
+ },
+ "cekmekoy": {
+  "tur": "ilce",
+  "yol": [
+   "istanbul",
+   "cekmekoy"
+  ]
+ },
+ "esenler": {
+  "tur": "ilce",
+  "yol": [
+   "istanbul",
+   "esenler"
+  ]
+ },
+ "esenyurt": {
+  "tur": "ilce",
+  "yol": [
+   "istanbul",
+   "esenyurt"
+  ]
+ },
+ "eyupsultan": {
+  "tur": "ilce",
+  "yol": [
+   "istanbul",
+   "eyupsultan"
+  ]
+ },
+ "fatih": {
+  "tur": "ilce",
+  "yol": [
+   "istanbul",
+   "fatih"
+  ]
+ },
+ "gaziosmanpasa": {
+  "tur": "ilce",
+  "yol": [
+   "istanbul",
+   "gaziosmanpasa"
+  ]
+ },
+ "gungoren": {
+  "tur": "ilce",
+  "yol": [
+   "istanbul",
+   "gungoren"
+  ]
+ },
+ "kadikoy": {
+  "tur": "ilce",
+  "yol": [
+   "istanbul",
+   "kadikoy"
+  ]
+ },
+ "kagithane": {
+  "tur": "ilce",
+  "yol": [
+   "istanbul",
+   "kagithane"
+  ]
+ },
+ "kartal": {
+  "tur": "ilce",
+  "yol": [
+   "istanbul",
+   "kartal"
+  ]
+ },
+ "kucukcekmece": {
+  "tur": "ilce",
+  "yol": [
+   "istanbul",
+   "kucukcekmece"
+  ]
+ },
+ "maltepe": {
+  "tur": "ilce",
+  "yol": [
+   "istanbul",
+   "maltepe"
+  ]
+ },
+ "pendik": {
+  "tur": "ilce",
+  "yol": [
+   "istanbul",
+   "pendik"
+  ]
+ },
+ "sancaktepe": {
+  "tur": "ilce",
+  "yol": [
+   "istanbul",
+   "sancaktepe"
+  ]
+ },
+ "sariyer": {
+  "tur": "ilce",
+  "yol": [
+   "istanbul",
+   "sariyer"
+  ]
+ },
+ "silivri": {
+  "tur": "ilce",
+  "yol": [
+   "istanbul",
+   "silivri"
+  ]
+ },
+ "sultanbeyli": {
+  "tur": "ilce",
+  "yol": [
+   "istanbul",
+   "sultanbeyli"
+  ]
+ },
+ "sultangazi": {
+  "tur": "ilce",
+  "yol": [
+   "istanbul",
+   "sultangazi"
+  ]
+ },
+ "sile": {
+  "tur": "ilce",
+  "yol": [
+   "istanbul",
+   "sile"
+  ]
+ },
+ "sisli": {
+  "tur": "ilce",
+  "yol": [
+   "istanbul",
+   "sisli"
+  ]
+ },
+ "tuzla": {
+  "tur": "ilce",
+  "yol": [
+   "istanbul",
+   "tuzla"
+  ]
+ },
+ "umraniye": {
+  "tur": "ilce",
+  "yol": [
+   "istanbul",
+   "umraniye"
+  ]
+ },
+ "uskudar": {
+  "tur": "ilce",
+  "yol": [
+   "istanbul",
+   "uskudar"
+  ]
+ },
+ "zeytinburnu": {
+  "tur": "ilce",
+  "yol": [
+   "istanbul",
+   "zeytinburnu"
+  ]
+ },
+ "atasehir-asikveysel": {
+  "tur": "mahalle",
+  "yol": [
+   "istanbul",
+   "atasehir",
+   "atasehir-asikveysel"
+  ]
+ },
+ "atasehir-ataturk": {
+  "tur": "mahalle",
+  "yol": [
+   "istanbul",
+   "atasehir",
+   "atasehir-ataturk"
+  ]
+ },
+ "atasehir-barbaros": {
+  "tur": "mahalle",
+  "yol": [
+   "istanbul",
+   "atasehir",
+   "atasehir-barbaros"
+  ]
+ },
+ "esatpasa": {
+  "tur": "mahalle",
+  "yol": [
+   "istanbul",
+   "atasehir",
+   "esatpasa"
+  ]
+ },
+ "atasehir-ferhatpasa": {
+  "tur": "mahalle",
+  "yol": [
+   "istanbul",
+   "atasehir",
+   "atasehir-ferhatpasa"
+  ]
+ },
+ "fetih": {
+  "tur": "mahalle",
+  "yol": [
+   "istanbul",
+   "atasehir",
+   "fetih"
+  ]
+ },
+ "icerenkoy": {
+  "tur": "mahalle",
+  "yol": [
+   "istanbul",
+   "atasehir",
+   "icerenkoy"
+  ]
+ },
+ "atasehir-inonu": {
+  "tur": "mahalle",
+  "yol": [
+   "istanbul",
+   "atasehir",
+   "atasehir-inonu"
+  ]
+ },
+ "kayisdagi": {
+  "tur": "mahalle",
+  "yol": [
+   "istanbul",
+   "atasehir",
+   "kayisdagi"
+  ]
+ },
+ "kucukbakkalkoy": {
+  "tur": "mahalle",
+  "yol": [
+   "istanbul",
+   "atasehir",
+   "kucukbakkalkoy"
+  ]
+ },
+ "atasehir-mevlana": {
+  "tur": "mahalle",
+  "yol": [
+   "istanbul",
+   "atasehir",
+   "atasehir-mevlana"
+  ]
+ },
+ "atasehir-mimar-sinan": {
+  "tur": "mahalle",
+  "yol": [
+   "istanbul",
+   "atasehir",
+   "atasehir-mimar-sinan"
+  ]
+ },
+ "mustafa-kemal": {
+  "tur": "mahalle",
+  "yol": [
+   "istanbul",
+   "atasehir",
+   "mustafa-kemal"
+  ]
+ },
+ "atasehir-ornek": {
+  "tur": "mahalle",
+  "yol": [
+   "istanbul",
+   "atasehir",
+   "atasehir-ornek"
+  ]
+ },
+ "yeni-camlica": {
+  "tur": "mahalle",
+  "yol": [
+   "istanbul",
+   "atasehir",
+   "yeni-camlica"
+  ]
+ },
+ "yenisahra": {
+  "tur": "mahalle",
+  "yol": [
+   "istanbul",
+   "atasehir",
+   "yenisahra"
+  ]
+ },
+ "atasehir-yenisehir": {
+  "tur": "mahalle",
+  "yol": [
+   "istanbul",
+   "atasehir",
+   "atasehir-yenisehir"
+  ]
+ }
+}

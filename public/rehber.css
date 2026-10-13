@@ -1,0 +1,173 @@
+/* İl / ilçe / mahalle sayfaları. styles.css'ten sonra yüklenir, token'ları ondan alır. */
+
+::selection { background: rgba(20, 163, 160, .22); color: var(--navy); }
+
+/* Sayfa başlığı (il ve ilçe) */
+.page-hero {
+  position: relative; overflow: hidden;
+  background: linear-gradient(180deg, #d9f3f1 0%, #ecf9f7 60%, #f7fcfb 100%);
+  padding: clamp(28px, 5vw, 48px) 0 clamp(36px, 6vw, 64px);
+}
+.page-hero .container { position: relative; z-index: 1; }
+.page-hero h1 {
+  font-weight: 900; font-size: clamp(32px, 5vw, 56px); color: var(--navy);
+  text-wrap: balance; max-width: 18ch; margin-top: 14px;
+}
+.page-lead { margin-top: 12px; max-width: 56ch; font-size: 18px; color: var(--muted); }
+.page-hero .search { margin-top: 24px; max-width: 520px; padding-right: 20px; }
+.page-hero .search input { height: 44px; }
+
+/* Kırıntı yolu */
+.crumbs ol { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; margin: 0; padding: 0; list-style: none; font-size: 14px; font-weight: 700; color: var(--muted); }
+.crumbs li { display: inline-flex; align-items: center; gap: 6px; }
+.crumbs li + li::before {
+  content: ""; width: 6px; height: 6px; border-right: 2px solid currentColor; border-top: 2px solid currentColor;
+  transform: rotate(45deg); opacity: .5; margin-right: 2px;
+}
+.crumbs a { color: var(--teal-700); text-decoration: underline; text-decoration-color: rgba(11, 122, 119, .3); text-underline-offset: 3px; }
+.crumbs a:hover { text-decoration-color: currentColor; }
+.crumbs [aria-current] { color: var(--navy); }
+
+/* Durum sayacı */
+.tally { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 18px; font-size: 15px; font-weight: 700; color: var(--muted); }
+.tally b { color: var(--navy); font-weight: 900; font-variant-numeric: tabular-nums; }
+.tally .is-open { display: inline-flex; align-items: center; gap: 7px; }
+.tally .is-open::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 0 4px rgba(20, 163, 160, .18); }
+
+/* Kum saati rozeti */
+.soon { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; font-weight: 800; color: var(--muted); white-space: nowrap; }
+.soon svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+/* --- İl sayfası: yakalara göre ilçe listesi --- */
+.yaka-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(24px, 4vw, 48px); align-items: start; }
+.yaka h2 { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; font-weight: 900; font-size: clamp(22px, 2.6vw, 28px); color: var(--navy); padding-bottom: 12px; margin-bottom: 16px; border-bottom: 2px solid var(--navy); }
+.yaka h2 small { font-size: 14px; font-weight: 700; color: var(--muted); font-variant-numeric: tabular-nums; }
+.ilce-list { list-style: none; margin: 0; padding: 0; columns: 2; column-gap: 24px; }
+.ilce-list li { break-inside: avoid; border-bottom: 1px solid var(--line); }
+.ilce-item { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 48px; padding: 0 4px; }
+.ilce-item.is-off { color: #7a849c; font-weight: 600; cursor: default; }
+.ilce-item.is-off .soon { color: #9aa3b8; font-weight: 700; }
+.ilce-item.is-off .soon span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+/* Aktif ilçe sütunları kırar, listenin başında tam genişlikte durur */
+.ilce-feature { column-span: all; border-bottom: 0 !important; margin-bottom: 8px; }
+.ilce-feature a {
+  display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 14px;
+  padding: 16px 18px; border-radius: var(--radius-sm); background: var(--navy); color: #fff;
+  box-shadow: 0 10px 24px -12px rgba(22, 36, 74, .6);
+  transition: transform .25s var(--ease), box-shadow .25s var(--ease), background-color .2s;
+}
+.ilce-feature a:hover { background: var(--navy-600); transform: translateY(-2px); box-shadow: 0 16px 30px -14px rgba(22, 36, 74, .7); }
+.ilce-feature .pin { width: 22px; height: 28px; color: var(--orange); }
+.ilce-feature strong { display: block; font-size: 20px; font-weight: 900; }
+.ilce-feature small { display: block; font-size: 14px; font-weight: 700; color: #b9c4e0; }
+.ilce-feature .go { width: 22px; height: 22px; transition: transform .2s var(--ease); }
+.ilce-feature a:hover .go { transform: translateX(3px); }
+
+/* --- İlçe sayfası: mahalle tabelaları --- */
+.plaka-grid { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+.plaka {
+  position: relative; display: flex; align-items: center; justify-content: center; gap: .35em;
+  min-height: 76px; padding: 14px 18px; border-radius: 10px; text-align: center;
+  background: var(--navy-600); color: #fff;
+  outline: 2px solid rgba(255, 255, 255, .9); outline-offset: -6px;
+  font-weight: 900; font-size: 17px; line-height: 1.15; letter-spacing: .03em; text-transform: uppercase;
+  box-shadow: 0 1px 0 rgba(22, 36, 74, .2), 0 8px 18px -10px rgba(22, 36, 74, .55);
+  transition: transform .25s var(--ease), box-shadow .25s var(--ease), background-color .2s;
+}
+.plaka .tur { font-size: .72em; font-weight: 800; opacity: .8; }
+a.plaka:hover { background: var(--navy); transform: translateY(-3px); box-shadow: 0 1px 0 rgba(22, 36, 74, .2), 0 16px 26px -12px rgba(22, 36, 74, .6); }
+a.plaka:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
+.plaka.is-off {
+  background: var(--soft); color: #7a849c; outline-color: var(--line); outline-offset: -6px;
+  box-shadow: inset 0 0 0 1px var(--line); cursor: default;
+}
+.plaka.is-off .soon { position: absolute; top: 10px; right: 12px; }
+.plaka.is-off .soon svg { width: 13px; height: 13px; color: #9aa3b8; }
+.plaka-new {
+  width: 100%; border: 2px dashed rgba(20, 163, 160, .5); background: var(--teal-50); color: var(--teal-700);
+  outline: 0; box-shadow: none; text-transform: none; letter-spacing: 0; font-size: 15px; cursor: pointer;
+  flex-direction: column; gap: 2px;
+}
+.plaka-new:hover { background: #d6f1ef; border-color: var(--teal); }
+.plaka-new small { font-size: 12.5px; font-weight: 700; color: var(--muted); }
+.plaka-new svg { width: 20px; height: 20px; }
+
+.empty { padding: 28px; border-radius: var(--radius-sm); background: var(--soft); color: var(--muted); font-weight: 700; text-align: center; }
+
+/* Hazırlanıyor durumu (pasif ilçe/mahalle doğrudan açılırsa) */
+.pending { display: grid; justify-items: start; gap: 14px; max-width: 560px; }
+.pending-icon { display: grid; place-items: center; width: 64px; height: 64px; border-radius: 20px; background: #fff; color: var(--orange-600); box-shadow: var(--shadow-sm); }
+.pending-icon svg { width: 30px; height: 30px; }
+
+/* --- Mahalle sayfası --- */
+.m-hero { padding-top: clamp(28px, 5vw, 48px); }
+.m-hero .crumbs { align-self: stretch; display: flex; justify-content: center; }
+.m-hero .plaka { margin-top: 22px; min-height: 0; padding: 16px clamp(22px, 4vw, 40px); font-size: clamp(22px, 3.6vw, 34px); outline-offset: -8px; outline-width: 3px; transform: rotate(-1.5deg); }
+.m-hero h1 { margin-top: 22px; font-size: clamp(32px, 5.4vw, 60px); max-width: 16ch; }
+
+.cat-state { display: inline-flex; align-items: center; gap: 5px; margin-top: auto; padding-top: 12px; font-size: 13px; font-weight: 800; color: var(--muted); }
+.cat-state svg { width: 14px; height: 14px; color: var(--orange-600); }
+
+.katki { display: grid; grid-template-columns: 1fr 1.1fr; gap: clamp(24px, 5vw, 64px); align-items: center; }
+.katki h2 { font-weight: 900; font-size: clamp(26px, 3.4vw, 36px); color: var(--navy); text-wrap: balance; }
+.katki > div > p { margin-top: 12px; color: var(--muted); font-size: 17px; max-width: 46ch; }
+.katki .btn { margin-top: 22px; }
+.akis { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; counter-reset: akis; }
+.akis li { position: relative; display: grid; grid-template-columns: 44px 1fr; gap: 14px; padding-bottom: 22px; }
+.akis li:last-child { padding-bottom: 0; }
+.akis li::after { content: ""; position: absolute; left: 21px; top: 44px; bottom: 0; width: 2px; background: var(--line); }
+.akis li:last-child::after { display: none; }
+.akis-icon { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 14px; background: #fff; color: var(--teal-700); box-shadow: var(--shadow-sm); }
+.akis-icon svg { width: 22px; height: 22px; }
+.akis strong { display: block; padding-top: 2px; font-weight: 900; color: var(--navy); }
+.akis span { display: block; margin-top: 2px; color: var(--muted); font-size: 15px; }
+
+.komsu { display: flex; flex-wrap: wrap; gap: 10px; }
+.komsu .plaka { min-height: 0; padding: 12px 18px; font-size: 13px; }
+.komsu .plaka.is-off .soon { position: static; }
+
+@media (max-width: 960px) {
+  .yaka-grid, .katki { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  .ilce-list { columns: 1; }
+  .plaka-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .plaka { min-height: 68px; font-size: 14px; padding: 12px 10px; }
+  .plaka.is-off .soon { top: 8px; right: 9px; }
+  .plaka-new { grid-column: 1 / -1; }
+}
+@media (hover: none) {
+  a.plaka:hover, .ilce-feature a:hover { transform: none; }
+}
+.footer-solo { margin-top: 0; padding-top: 0; border-top: 0; }
+.site-footer:has(.footer-solo) { padding: 28px 0; }
+
+/* Açık mahalle tabelası iki sütun kaplar, uzun adlar sığar */
+.plaka-grid > li:has(> a.plaka) { grid-column: span 2; }
+.plaka { flex-wrap: wrap; }
+.page-hero + .section { padding-top: clamp(32px, 5vw, 56px); }
+.brand-sub { min-width: 0; }
+.brand-sub span { overflow: hidden; text-overflow: ellipsis; }
+@media (max-width: 560px) {
+  .brand-sub { max-width: 46vw; }
+  .m-hero .cloud, .m-hero .sun { display: none; }
+}
+
+/* Eczane listesi */
+.eczane-section { padding-top: 0; }
+.eczane-list { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr)); gap: 14px; }
+.eczane {
+  display: grid; grid-template-columns: auto 1fr; gap: 12px 14px; align-items: start;
+  padding: 18px; border-radius: var(--radius-sm); background: #fff; border: 1px solid var(--line); box-shadow: var(--shadow-sm);
+}
+.eczane-icon { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 12px; background: #ffecee; color: #e8505b; }
+.eczane-icon svg { width: 24px; height: 24px; }
+.eczane h3 { font-size: 16px; font-weight: 800; line-height: 1.3; color: var(--navy); }
+.eczane p { margin-top: 4px; font-size: 14px; line-height: 1.4; color: var(--muted); }
+.eczane-actions { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 8px; }
+.btn-soft { min-height: 44px; padding: 0 16px; font-size: 14px; background: var(--soft); color: var(--navy); border: 1px solid var(--line); }
+.btn-soft:hover { background: #fff; border-color: var(--navy); }
+.kaynak { margin-top: 18px; font-size: 14px; color: var(--muted); }
+/* Kayıt sayısı gerçek veri: soluk değil, okunur renkte (kategori rengi koyulaştırılır) */
+.cat-link { opacity: 1; color: color-mix(in srgb, var(--c) 72%, #000); }

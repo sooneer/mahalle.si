@@ -1,0 +1,17 @@
+{"mahalle":"kartal-cevizli","eczaneler":[
+{"id":29358,"ad":"ADALET ECZANESİ","adres":"Cevizli Mahallesi, Mustafa Kemal Caddesi, 58/A","telefon":"+905058252730","konum":[40.91230099961025,29.178817000012668]},
+{"id":27522,"ad":"ANADOLU ECZANESİ","adres":"Orhantepe Mahallesi, Saraylar Caddesi, 48/B","telefon":"+902164423210","konum":[40.91149160713335,29.16384495194391]},
+{"id":18676,"ad":"CEVİZLİ DERMAN ECZANESİ","adres":"Cevizli Mahallesi, Denizer Caddesi, 25A","telefon":"+902163050473","konum":[40.91551616069891,29.16916653546535]},
+{"id":15656,"ad":"ERZİNCAN TİRYAKİ ECZANESİ","adres":"Cevizli Mahallesi, Denizer Caddesi, 25B","telefon":"+902163834724","konum":[40.91571479610438,29.169942448694485]},
+{"id":30424,"ad":"EYLÜL ECZANESİ ","adres":"Cevizli Mahallesi, Karadeniz Sokak, 2/A","telefon":"+902164591156","konum":[40.91441358637935,29.167614081012537]},
+{"id":38438,"ad":"GİZEM ECZANESİ","adres":"Cevizli Mahallesi, Mustafa Kemal Caddesi, No:28/A","telefon":null,"konum":[40.91237944341466,29.172797425698544]},
+{"id":18432,"ad":"GÜNDOĞDU ECZANESİ","adres":"Cevizli Mahallesi, Mustafa Kemal Caddesi, 26/D","telefon":"+902164418266","konum":[40.91240158879349,29.17264244997912]},
+{"id":26344,"ad":"GÜRBÜZ ECZANESİ","adres":"Cevizli Mahallesi, Cevizli D-100 Güney Yanyol Caddesi, 2/14","telefon":"+902163522520","konum":[40.91762106156937,29.173569670668968]},
+{"id":27722,"ad":"MAY ECZANESİ","adres":"Cevizli Mahallesi, Cevizli D-100 Güney Yanyol Caddesi, 2C","telefon":"+902163050570","konum":[40.91782171625816,29.173407107825756]},
+{"id":30250,"ad":"PELİN DOĞAN ECZANESİ","adres":"Cevizli Mahallesi, Köroğlu Caddesi, 3/A","telefon":"+905059526275","konum":[40.91047400040195,29.17244700001914]},
+{"id":20192,"ad":"SU ECZANESİ","adres":"Cevizli Mahallesi, Seyit Gazi Sokak, 16/A","telefon":"+905318987199","konum":[40.91077400035391,29.181106999869343]},
+{"id":32918,"ad":"SU ECZANESİ","adres":"Cevizli Mahallesi, Seyit Gazi Sokak, No:16/A","telefon":"+905318987199","konum":[40.91077400035391,29.181106999869343]},
+{"id":12546,"ad":"YEKTA ECZANESİ","adres":"Cevizli Mahallesi, Mustafa Kemal Caddesi, 28","telefon":"+902164598681","konum":[40.91231644245109,29.173130268098014]},
+{"id":7830,"ad":"YILDIZ ECZANESİ","adres":"Cevizli Mahallesi, Konya Sokak, 10/A","telefon":"+902163993438","konum":[40.91373649524206,29.167398625193385]},
+{"id":32186,"ad":"ZEHRA IŞIK ECZANESİ","adres":"Cevizli Mahallesi, Mustafa Kemal Caddesi, 42/A","telefon":"+902163059080","konum":[40.91275700019535,29.17524100015975]}
+]}

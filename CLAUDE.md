@@ -11,7 +11,8 @@ Paket ve build adımı yok. Sade HTML, CSS ve JS kullanılıyor, Cloudflare Work
   - `styles.css` tasarım token'ları `:root` içinde (turkuaz, turuncu, lacivert).
   - `app.js` mobil menü, Türkçe karakter duyarsız arama → kategori eşleme (`KEYWORDS`), toast, bülten formu ve Turnstile.
   - `img/hero-scene.svg` hero mahalle illüstrasyonu. Animasyonları dosyanın içindeki `<style>`'da.
-- `src/worker.js` Worker. Yalnızca `/api/*` istekleri Worker'a gelir (`run_worker_first`), geri kalanı `env.ASSETS`'e düşer.
+- `src/worker.js` Worker. `/data`, `/img`, `.css` ve `.js` dışındaki istekler Worker'a gelir (`run_worker_first`).
+  - `routePlace` il/ilçe/mahalle sayfalarını sunar. `YONLENDIRME=subdomain` (yayın): `atasehir.mahalle.si`. `YONLENDIRME=klasor` (yerel, `.dev.vars`): `/istanbul/atasehir`.
   - `POST /api/subscribe` sırasıyla Turnstile doğrular, e-postayı doğrular ve D1'e `INSERT OR IGNORE` ile yazar.
 - `schema.sql` D1 şeması (`subscribers` tablosu).
 - `wrangler.jsonc` Worker `mahalle-si`, D1 binding `DB` (`mahalle-si-emails`), custom domain `mahalle.si`.
@@ -19,8 +20,12 @@ Paket ve build adımı yok. Sade HTML, CSS ve JS kullanılıyor, Cloudflare Work
 ## Komutlar
 
 ```sh
-npx wrangler dev                       # yerel önizleme (http://localhost:8787)
+cp .dev.vars.example .dev.vars        # ilk kurulumda bir kez (klasör modunu açar)
+npx wrangler dev                       # yerel önizleme (http://localhost:8787/istanbul/atasehir/kucukbakkalkoy)
 npx wrangler deploy                    # yayına alma
+node scripts/eczane-bol.js             # data/eczane.json → public/data/eczaneler/<mahalle>.json
+node scripts/mahalle-sinir.js ATAŞEHİR  # OSM mahalle sınırları → data/osm-atasehir.geojson (Nominatim, yavaş: 1 istek/sn)
+node scripts/sinir-yayinla.js          # data/osm-*.geojson → public/data/sinirlar/ (konumla mahalle bulma)
 npx wrangler d1 execute mahalle-si-emails --remote --file=schema.sql
 npx wrangler d1 execute mahalle-si-emails --remote --command "SELECT * FROM subscribers"
 ```

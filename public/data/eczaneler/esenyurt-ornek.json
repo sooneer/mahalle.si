@@ -1,0 +1,11 @@
+{"mahalle":"esenyurt-ornek","eczaneler":[
+{"id":16478,"ad":"ATAKLI ECZANESİ","adres":"Örnek Mahallesi, Fikri Sönmez Caddesi, 89/A","telefon":"+902126206884","konum":[41.043619962917234,28.668520702336064]},
+{"id":28162,"ad":"BİRLİK ECZANESİ","adres":"Örnek Mahallesi, Fikri Sönmez Caddesi, 6/8D","telefon":"+902126204693","konum":[41.045286000362644,28.672184999963882]},
+{"id":24584,"ad":"ESENYURT İBNİ SİNA ECZANESİ","adres":"Örnek Mahallesi, Doğan Araslı Bulvarı, 199","telefon":"+902126990919","konum":[41.04504354041431,28.67483139062213]},
+{"id":15414,"ad":"HOCAOĞLU ECZANESİ","adres":"Örnek Mahallesi, Ahmet Arif Caddesi, 6/B","telefon":"+902126204822","konum":[41.04157346497619,28.675691652701307]},
+{"id":25528,"ad":"LOTUS ECZANESİ","adres":"Örnek Mahallesi, Fikri Sönmez Caddesi, 23A","telefon":"+902125961046","konum":[41.04534849206045,28.673293144015602]},
+{"id":33662,"ad":"MEHMET SAYAN ECZANESİ","adres":"Örnek Mahallesi, Fikri Sönmez Caddesi, 25/B","telefon":"+902127584321","konum":[41.04534100015209,28.673163999601773]},
+{"id":26414,"ad":"MERİ ECZANESİ","adres":"Örnek Mahallesi, Fikri Sönmez Caddesi, 15/A","telefon":"+902126203320","konum":[41.04542653750471,28.673711955349905]},
+{"id":34898,"ad":"MERİ ECZANESİ","adres":"Örnek Mahallesi, Fikri Sönmez Caddesi, No:15/A","telefon":null,"konum":[41.04542653750471,28.673711955349905]},
+{"id":34154,"ad":"PİRHAN ECZANESİ","adres":"Örnek Mahallesi, Fikri Sönmez Caddesi, No:107/B","telefon":"+902126995848","konum":[41.04266877549015,28.666929271922566]}
+]}

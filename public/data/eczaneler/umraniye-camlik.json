@@ -1,0 +1,11 @@
+{"mahalle":"umraniye-camlik","eczaneler":[
+{"id":21476,"ad":"AKSOY ECZANESİ","adres":"Çamlık Mahallesi, Osman Ali Paşa Sokak, 26A","telefon":"+902169990848","konum":[41.00944202539646,29.12517401626639]},
+{"id":26946,"ad":"BONCUK ECZANESİ","adres":"Çamlık Mahallesi, Şehit Burak Kurtuluş Caddesi, 102/A","telefon":"+902163648506","konum":[41.00450799989693,29.127487000524237]},
+{"id":29836,"ad":"DEMİR ECZANESİ","adres":"Çamlık Mahallesi, Şehit Burak Kurtuluş Caddesi, 60/74 A Blok 37","telefon":"+902165190200","konum":[41.008455000013385,29.129364000434585]},
+{"id":38932,"ad":"DOĞANYILDIZ ECZANESİ","adres":"Çamlık Mahallesi, İkbal Caddesi, 124/A","telefon":"+902169992191","konum":[41.00478800017701,29.124459000159124]},
+{"id":23434,"ad":"DOĞUŞ ECZANESİ","adres":"Çamlık Mahallesi, İkbal Caddesi, 99/A","telefon":"+902165947838","konum":[41.0077629117073,29.126126268254655]},
+{"id":22266,"ad":"ERDEM ECZANESİ","adres":"Çamlık Mahallesi, İkbal Caddesi, 99","telefon":"+902165082712","konum":[41.00767815654175,29.126090212038214]},
+{"id":12310,"ad":"İKBAL ECZANESİ","adres":"Çamlık Mahallesi, İkbal Caddesi, 97/A","telefon":"+902165409072","konum":[41.00797390999039,29.126303249192745]},
+{"id":19346,"ad":"İPEK ECZANESİ","adres":"Çamlık Mahallesi, İkbal Caddesi, 155/B","telefon":"+902165404245","konum":[41.000452244949294,29.124013478792673]},
+{"id":13276,"ad":"MELİSA ECZANESİ","adres":"Çamlık Mahallesi, İkbal Caddesi, 106/A","telefon":"+902164723834","konum":[41.00870187282944,29.126523349155555]}
+]}

@@ -1,0 +1,23 @@
+{
+  "ilce": { "ad": "Ataşehir", "slug": "atasehir", "yaka": "anadolu", "aktif": true },
+  "il": { "ad": "İstanbul", "slug": "istanbul" },
+  "mahalleler": [
+    { "ad": "Aşıkveysel", "slug": "atasehir-asikveysel", "aktif": false },
+    { "ad": "Atatürk", "slug": "atasehir-ataturk", "aktif": false },
+    { "ad": "Barbaros", "slug": "atasehir-barbaros", "aktif": false },
+    { "ad": "Esatpaşa", "slug": "esatpasa", "aktif": false },
+    { "ad": "Ferhatpaşa", "slug": "atasehir-ferhatpasa", "aktif": false },
+    { "ad": "Fetih", "slug": "fetih", "aktif": false },
+    { "ad": "İçerenköy", "slug": "icerenkoy", "aktif": false },
+    { "ad": "İnönü", "slug": "atasehir-inonu", "aktif": false },
+    { "ad": "Kayışdağı", "slug": "kayisdagi", "aktif": false },
+    { "ad": "Küçükbakkalköy", "slug": "kucukbakkalkoy", "aktif": true },
+    { "ad": "Mevlana", "slug": "atasehir-mevlana", "aktif": false },
+    { "ad": "Mimar Sinan", "slug": "atasehir-mimar-sinan", "aktif": false },
+    { "ad": "Mustafa Kemal", "slug": "mustafa-kemal", "aktif": false },
+    { "ad": "Örnek", "slug": "atasehir-ornek", "aktif": false },
+    { "ad": "Yeni Çamlıca", "slug": "yeni-camlica", "aktif": false },
+    { "ad": "Yenisahra", "slug": "yenisahra", "aktif": false },
+    { "ad": "Yenişehir", "slug": "atasehir-yenisehir", "aktif": false }
+  ]
+}

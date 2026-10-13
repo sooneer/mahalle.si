@@ -1,0 +1,14 @@
+{
+  "mahalle": { "ad": "Küçükbakkalköy", "slug": "kucukbakkalkoy", "aktif": true },
+  "ilce": { "ad": "Ataşehir", "slug": "atasehir" },
+  "il": { "ad": "İstanbul", "slug": "istanbul" },
+  "kategoriler": [
+    { "id": "eczane", "ad": "Eczaneler", "aciklama": "Adres, telefon ve konum", "ikon": "i-pharmacy", "renk": "#e8505b", "zemin": "#ffecee", "kayitSayisi": 24 },
+    { "id": "okul", "ad": "Okullar", "aciklama": "Anaokulundan liseye", "ikon": "i-school", "renk": "#0f8a87", "zemin": "#e3f6f5", "kayitSayisi": null },
+    { "id": "usta", "ad": "Ustalar & Tesisatçılar", "aciklama": "Tesisat, elektrik, çilingir", "ikon": "i-tools", "renk": "#22356a", "zemin": "#e8edf7", "kayitSayisi": null },
+    { "id": "kafe", "ad": "Kafe & Restoranlar", "aciklama": "Kahvaltı, kahve, akşam yemeği", "ikon": "i-cafe", "renk": "#b8641c", "zemin": "#fdf0e1", "kayitSayisi": null },
+    { "id": "kuyumcu", "ad": "Kuyumcular", "aciklama": "Altın, pırlanta, saat", "ikon": "i-gem", "renk": "#e8701f", "zemin": "#fff1e6", "kayitSayisi": null },
+    { "id": "temizleme", "ad": "Kuru Temizleme", "aciklama": "Ütü, halı, perde yıkama", "ikon": "i-hanger", "renk": "#2e7fc1", "zemin": "#e6f1fb", "kayitSayisi": null },
+    { "id": "yardim", "ad": "Kayıp & Yardımlaşma", "aciklama": "Kayıp dostlar, komşu desteği", "ikon": "i-paw", "renk": "#d6457a", "zemin": "#fdebf2", "kayitSayisi": null }
+  ]
+}

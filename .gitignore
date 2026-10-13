@@ -13,6 +13,7 @@ node_modules/
 .codex/
 .impeccable/
 data/
+!public/data/
 .claude/skills/
 .claude/agents/
 .claude/settings.local.json

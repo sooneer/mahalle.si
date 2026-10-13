@@ -7,8 +7,16 @@
 		"directory": "./public",
 		"binding": "ASSETS",
 		"run_worker_first": [
-			"/api/*"
+			"/*",
+			"!/data/*",
+			"!/img/*",
+			"!/*.css",
+			"!/*.js"
 		]
+	},
+	// subdomain: yayında istanbul.mahalle.si gibi. Yerelde .dev.vars ile "klasor" yapılır.
+	"vars": {
+		"YONLENDIRME": "subdomain"
 	},
 	"d1_databases": [
 		{

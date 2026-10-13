@@ -100,6 +100,104 @@ document.querySelectorAll(".chip").forEach((chip) => {
   });
 });
 
+// --- Konumla mahalle bulma ---------------------------------------------------
+// Konum tarayıcıda kalır: sınır dosyaları indirilir, eşleştirme burada yapılır.
+// Yollar klasör biçiminde; yayında Worker bunları ilgili subdomain'e yönlendirir.
+const konumBtn = document.getElementById("konum-btn");
+const konumSonuc = document.getElementById("konum-sonuc");
+const yolUrl = (yol) => "/" + yol.join("/");
+
+// Işın atma: nokta halkanın içinde mi? (koordinatlar [boylam, enlem])
+function halkada([x, y], halka) {
+  let ic = false;
+  for (let i = 0, j = halka.length - 1; i < halka.length; j = i++) {
+    const [xi, yi] = halka[i], [xj, yj] = halka[j];
+    if ((yi > y) !== (yj > y) && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) ic = !ic;
+  }
+  return ic;
+}
+const poligonda = (nokta, [dis, ...delikler]) => halkada(nokta, dis) && !delikler.some((d) => halkada(nokta, d));
+
+async function mahalleBul(nokta) {
+  const [x, y] = nokta;
+  const index = await fetch("/data/sinirlar/index.json").then((r) => r.json());
+  for (const { ilce, kutu } of index.filter(({ kutu: [x1, y1, x2, y2] }) => x >= x1 && x <= x2 && y >= y1 && y <= y2)) {
+    const veri = await fetch(`/data/sinirlar/${ilce}.json`).then((r) => r.json());
+    const m = veri.mahalleler.find((m) => m.poligonlar.some((p) => poligonda(nokta, p)));
+    if (m) return { ...m, il: veri.il, ilce: veri.ilce };
+  }
+  return null;
+}
+
+function konumuAl() {
+  return new Promise((resolve, reject) => {
+    if (!navigator.geolocation) return reject(new Error("destek"));
+    navigator.geolocation.getCurrentPosition(
+      (p) => resolve([p.coords.longitude, p.coords.latitude]), reject,
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 300000 });
+  });
+}
+
+function sonucGoster(...cocuklar) {
+  konumSonuc.replaceChildren(...cocuklar);
+  konumSonuc.hidden = false;
+}
+function el(tag, attrs, text) {
+  const e = document.createElement(tag);
+  Object.assign(e, attrs);
+  if (text) e.textContent = text;
+  return e;
+}
+
+function mahalleSonucu(m, oneri) {
+  const ilceUrl = yolUrl([m.il.slug, m.ilce.slug]);
+  const soru = oneri ? `${m.ad} civarındasın gibi görünüyor.` : `${m.ad} Mahallesi'nde misin? (${m.ilce.ad})`;
+  if (!m.aktif) {
+    return sonucGoster(el("p", {}, `${soru} Bu mahallenin rehberi henüz hazırlanıyor.`),
+      el("a", { className: "btn btn-navy", href: ilceUrl }, `${m.ilce.ad} mahallelerine bak`));
+  }
+  sonucGoster(el("p", {}, soru),
+    el("a", { className: "btn btn-orange", href: yolUrl([m.il.slug, m.ilce.slug, m.slug]) }, oneri ? `${m.ad} rehberine git` : "Evet, rehbere git"),
+    el("a", { className: "btn btn-ghost", href: ilceUrl }, "Başka mahalle seç"));
+}
+
+async function konumlaBul(oneri = false) {
+  konumBtn.disabled = true;
+  konumBtn.lastElementChild.textContent = "Konum alınıyor...";
+  try {
+    const m = await mahalleBul(await konumuAl());
+    if (m) mahalleSonucu(m, oneri);
+    else if (!oneri) sonucGoster(el("p", {}, "Bulunduğun bölge henüz açık değil. Şimdilik Ataşehir'deki mahalleleri tanıyoruz."),
+      el("a", { className: "btn btn-navy", href: "/istanbul" }, "İlçelere göz at"));
+  } catch (err) {
+    if (oneri) return;
+    sonucGoster(el("p", {}, err.code === 1
+      ? "Konum izni verilmedi. Mahalleni aşağıdan seçebilirsin."
+      : "Konumun alınamadı. Mahalleni aşağıdan seçebilirsin."));
+  } finally {
+    konumBtn.disabled = false;
+    konumBtn.lastElementChild.textContent = "Konumumla bul";
+  }
+}
+
+konumBtn.addEventListener("click", () => konumlaBul(false));
+
+// İzin daha önce verildiyse sormadan öneri göster; yönlendirme yapma, karar kullanıcının.
+navigator.permissions?.query({ name: "geolocation" })
+  .then((izin) => { if (izin.state === "granted") konumlaBul(true); })
+  .catch(() => {});
+
+// Son bakılan mahalle (mahalle sayfası kaydediyor)
+try {
+  const son = JSON.parse(localStorage.getItem("sonMahalle") || "null");
+  if (son?.ad && Array.isArray(son.yol) && son.yol.every((s) => /^[a-z0-9-]+$/.test(s))) {
+    const link = document.getElementById("son-mahalle");
+    link.href = yolUrl(son.yol);
+    link.textContent = `Son baktığın: ${son.ad}`;
+    link.hidden = false;
+  }
+} catch {}
+
 // --- Bülten + Turnstile -----------------------------------------------------
 const nlForm = document.getElementById("newsletter-form");
 const nlEmail = document.getElementById("email");

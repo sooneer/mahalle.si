@@ -1,0 +1,3 @@
+# Yerel geliştirme: cp .dev.vars.example .dev.vars
+# klasor: localhost:8787/istanbul/atasehir/kucukbakkalkoy
+YONLENDIRME=klasor

@@ -323,3 +323,25 @@ p { margin: 0; }
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
 }
+
+/* Ana sayfa: il → ilçe → mahalle kısayolu */
+.yol { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px 8px; margin-top: 14px; }
+.yol a { padding: 6px 12px; border-radius: 999px; font-size: 14px; font-weight: 800; color: var(--navy); background: rgba(255, 255, 255, .85); border: 1px solid var(--line); }
+.yol a:hover { border-color: var(--teal); }
+.yol svg { width: 14px; height: 14px; color: var(--muted); }
+
+/* Ana sayfa: konumla mahalle bulma */
+.konum { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 10px; margin-top: 18px; }
+.btn-konum { background: #fff; color: var(--navy); border: 1px solid var(--line); box-shadow: var(--shadow-sm); }
+.btn-konum:hover:not(:disabled) { border-color: var(--teal); }
+.btn-konum svg { width: 14px; height: 18px; color: var(--teal-700); }
+.son-mahalle { font-size: 14px; font-weight: 800; color: var(--navy); text-decoration: underline; text-underline-offset: 3px; }
+.konum-sonuc {
+  display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 10px;
+  margin-top: 14px; padding: 14px 18px; max-width: 560px; border-radius: var(--radius-sm);
+  background: #fff; border: 1px solid var(--line); box-shadow: var(--shadow-sm);
+}
+.konum-sonuc p { flex-basis: 100%; font-weight: 700; color: var(--navy); }
+.konum-sonuc .btn { height: 40px; padding: 0 16px; font-size: 14px; }
+.btn-ghost { background: transparent; color: var(--navy); border: 1px solid var(--line); }
+.btn-ghost:hover { border-color: var(--navy); }

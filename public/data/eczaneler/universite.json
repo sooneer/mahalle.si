@@ -1,0 +1,16 @@
+{"mahalle":"universite","eczaneler":[
+{"id":3958,"ad":"AKALIN ECZANESİ","adres":"Üniversite Mahallesi, Uran Caddesi, 5/D","telefon":"+902124232257","konum":[40.99464467377715,28.70910715070196]},
+{"id":18748,"ad":"AKBULUT ECZANESİ","adres":"Üniversite Mahallesi, Zakkum Sokak, 16/B","telefon":"+902125912021","konum":[40.99542845645367,28.712707526728664]},
+{"id":34658,"ad":"BETÜL ECZANESİ","adres":"Üniversite Mahallesi, Uran Caddesi, 7A","telefon":"+902124237413","konum":[40.99483099978835,28.70921300056199]},
+{"id":25024,"ad":"DEMİR ECZANESİ","adres":"Üniversite Mahallesi, Mareşal Caddesi, 18B-18C","telefon":"+902125932105","konum":[40.99711800035068,28.707721999715513]},
+{"id":28262,"ad":"DURMUŞ ECZANESİ","adres":"Üniversite Mahallesi, Toker Kardeşler Sokak, 1/C","telefon":"+902128901910","konum":[40.99662409982479,28.712977725161053]},
+{"id":15184,"ad":"EBRU ECZANESİ","adres":"Üniversite Mahallesi, Uran Caddesi, 41","telefon":"+902124282837","konum":[40.99769904153141,28.712450450224786]},
+{"id":31294,"ad":"GÜRBÜZ ECZANESİ","adres":"Üniversite Mahallesi, Uran Caddesi, 7/C","telefon":"+902126900090","konum":[40.994816999693164,28.709240000232967]},
+{"id":31690,"ad":"KOCABAY ECZANESİ","adres":"Üniversite Mahallesi, Mareşal Caddesi, 34/AA","telefon":"+902125099969","konum":[40.99848599990894,28.709095999678848]},
+{"id":11826,"ad":"METİN ECZANESİ","adres":"Üniversite Mahallesi, Uran Caddesi, 7/B","telefon":"+902124282788","konum":[40.99484400016376,28.70922200004439]},
+{"id":28700,"ad":"PARSELLER ECZANESİ","adres":"Üniversite Mahallesi, Mareşal Caddesi, 48/A","telefon":"+902124010335","konum":[40.99965599956013,28.710282000049244]},
+{"id":14596,"ad":"PELİCAN MALL ECZANESİ","adres":"Üniversite Mahallesi, Selvi Sokak, 25/1","telefon":"+902125969157","konum":[40.990684002131616,28.714689000268528]},
+{"id":23766,"ad":"SENGÜL ECZANESİ","adres":"Üniversite Mahallesi Aşık Mahsuni Sokak 8/A","telefon":"+902125910012","konum":[40.99518636016485,28.71001392752904]},
+{"id":16470,"ad":"TÜRKAN ECZANESİ","adres":"Üniversite Mahallesi, Uran Caddesi, 11/A","telefon":"+902124280275","konum":[40.99524599975023,28.70936600039432]},
+{"id":22952,"ad":"YENİ GÜNDOĞDU ECZANESİ","adres":"Üniversite Mahallesi, Mareşal Caddesi, 24/A","telefon":"+902124237923","konum":[40.99766995869107,28.708259380414777]}
+]}

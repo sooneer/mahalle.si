@@ -1,0 +1,11 @@
+{"mahalle":"ferikoy","eczaneler":[
+{"id":30210,"ad":"BAHÇE ECZANESİ","adres":"Feriköy Mahallesi, Kurtuluş Caddesi, 108/A","telefon":"+902122963417","konum":[41.04947600000598,28.981653999548417]},
+{"id":19410,"ad":"FERİKÖY SEZEN ECZANESİ","adres":"Feriköy Mahallesi, Hilal Sokak, 40/A","telefon":"+902122918423","konum":[41.050035750048814,28.97811056234458]},
+{"id":18182,"ad":"KURTULUŞ ECZANESİ","adres":"Feriköy Mahallesi, Kurtuluş Caddesi, 204","telefon":"+902122317410","konum":[41.04640024306703,28.979148525225177]},
+{"id":8498,"ad":"KURTULUŞ SAĞLIK ECZANESİ","adres":"Bozkurt Mahallesi Kurtuluş Caddesi Seymen Sok. No:66","telefon":"+902122480377","konum":[41.04982322577524,28.981698590856357]},
+{"id":13028,"ad":"LİMON ECZANESİ","adres":"Feriköy Mahallesi, Kurtuluş Caddesi, 160A","telefon":"+902123433499","konum":[41.04793200037328,28.980370000457146]},
+{"id":27964,"ad":"PETEK ECZANESİ","adres":"Feriköy Mahallesi, Baruthane Caddesi, 53/B","telefon":"+902122964374","konum":[41.051393127032,28.982588076417738]},
+{"id":27966,"ad":"SENA ECZANESİ","adres":"Feriköy Mahallesi, Kurtuluş Caddesi, 94/A","telefon":"+902122249435","konum":[41.04995200013756,28.98205900011274]},
+{"id":8392,"ad":"VATAN ECZANESİ","adres":"Bozkurt Mahallesi, Kurtuluş Caddesi, 142/A","telefon":"+902122410605","konum":[41.04847323469598,28.980802004194505]},
+{"id":21342,"ad":"YENİ VİOLET ECZANESİ","adres":"Feriköy Mahallesi, Kurtuluş Caddesi, 150/B","telefon":"+902122252680","konum":[41.04825508785498,28.98062283860478]}
+]}

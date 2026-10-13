@@ -1,0 +1,13 @@
+{"mahalle":"bagcilar-cinar","eczaneler":[
+{"id":28120,"ad":"BAĞCILAR ECZANESİ","adres":"Bağcılar Merkez Mahallesi, İstanbul Caddesi, No:30/A","telefon":"+905013640034","konum":[41.03414349347861,28.860324052262353]},
+{"id":22436,"ad":"ÇINAR ECZANESİ","adres":"Çınar Mahallesi, Osman Gazi Caddesi, 64/A","telefon":"+902124331379","konum":[41.04015988166847,28.85938223731056]},
+{"id":25096,"ad":"DERYA ECZANESİ","adres":"Çınar Mahallesi, 7/2b Sokak, 1/1","telefon":"+902126343007","konum":[41.0358322256207,28.860141188375867]},
+{"id":16440,"ad":"GÖKER ECZANESİ","adres":"Çınar Mahallesi, Esenler Caddesi, 1B","telefon":"+902125629949","konum":[41.03358099997912,28.863821999767104]},
+{"id":25314,"ad":"GÜLER ECZANESİ","adres":"Çınar Mahallesi, Esenler Caddesi, 31/F","telefon":"+902125690190","konum":[41.034809421032996,28.86684018731521]},
+{"id":23598,"ad":"GÜLSEN ECZANESİ","adres":"Çınar Mahallesi, 864. Sokak, 9A","telefon":"+902126343000","konum":[41.035934000331295,28.85995100041518]},
+{"id":18750,"ad":"İĞDE ECZANESİ","adres":"Çınar Mahallesi, 753. Sokak, 20/C","telefon":"+902125080850","konum":[41.03745579171345,28.86849206648229]},
+{"id":18452,"ad":"MERKEZ ŞİFA ECZANESİ","adres":"Çınar Mahallesi, 842. Sokak, 12","telefon":"+902126343410","konum":[41.03570363933698,28.860086119529033]},
+{"id":20286,"ad":"TORAMAN ECZANESİ","adres":"Çınar Mahallesi, Esenler Caddesi, 11/A","telefon":"+902125690270","konum":[41.03428545711962,28.86505830671803]},
+{"id":24554,"ad":"YENİ TABYA ECZANESİ","adres":"Çınar Mahallesi, Fatih Caddesi, 95B","telefon":"+902124362022","konum":[41.040048798659186,28.862052261691773]},
+{"id":24604,"ad":"YENİ VEFA ECZANESİ","adres":"Çınar Mahallesi, 773. Sokak, 58/1","telefon":"+902126101066","konum":[41.03880915833897,28.865443915352934]}
+]}

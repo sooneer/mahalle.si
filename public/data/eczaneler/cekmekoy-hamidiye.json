@@ -1,0 +1,9 @@
+{"mahalle":"cekmekoy-hamidiye","eczaneler":[
+{"id":41018,"ad":"ANNEM ECZANESİ","adres":"Mimar Sinan Mahallesi, Mimar Sinan Caddesi, No:46/A","telefon":null,"konum":[41.030403357407764,29.188266560051964]},
+{"id":20772,"ad":"ATAMAN ECZANESİ","adres":"Hamidiye Mahallesi, Barış Yolu Caddesi, 4/6","telefon":"+902166420312","konum":[41.02771424157432,29.191349667721706]},
+{"id":23104,"ad":"GÜNEŞ ECZANESİ","adres":"Hamidiye Mahallesi, Serkan Sokak, 47/A","telefon":"+905397008855","konum":[41.02624381856065,29.185588929133328]},
+{"id":23894,"ad":"HALUK GÜLTEKİN ECZANESİ","adres":"Hamidiye Mahallesi, Şahinbey Caddesi, 91/1A","telefon":"+902166423270","konum":[41.02200332129778,29.193229928818884]},
+{"id":14012,"ad":"SEMRA ECZANESİ","adres":"Hamidiye Mahallesi, Ulubatlı Hasan Caddesi, 8B/2","telefon":"+902163358716","konum":[41.02169020961307,29.192011494522824]},
+{"id":18626,"ad":"ÜRÜN ECZANESİ","adres":"Hamidiye Mahallesi, Şener Sokak, No:28A","telefon":"+902166522524","konum":[41.02605700031585,29.18564399942708]},
+{"id":10394,"ad":"ZEHRA ECZANESİ","adres":"Hamidiye Mahallesi, Şener Sokak, 28/A","telefon":"+902166422524","konum":[41.02750878006695,29.184199201417567]}
+]}

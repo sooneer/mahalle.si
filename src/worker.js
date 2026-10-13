@@ -69,6 +69,58 @@ export default {
       return json({ ok: true });
     }
 
+    const page = await routePlace(url, request, env);
+    if (page) return page;
+
     return env.ASSETS.fetch(request);
   },
 };
+
+// --- İl / ilçe / mahalle yönlendirmesi ----------------------------------------
+// Yayında:  istanbul.mahalle.si, atasehir.mahalle.si, kucukbakkalkoy.mahalle.si
+// Yerelde:  localhost:8787/istanbul/atasehir/kucukbakkalkoy (klasör mantığı)
+// Yayındaki ana alan adında klasör yolu gelirse ilgili subdomain'e 301 ile yönlendirilir.
+const ROOT_DOMAIN = "mahalle.si";
+const PAGE_BY_DEPTH = ["/il", "/ilce", "/mahalle"]; // il.html, ilce.html, mahalle.html
+const PAGE_BY_TYPE = { il: "/il", ilce: "/ilce", mahalle: "/mahalle" };
+const SLUG_RE = /^[a-z0-9]+(-[a-z0-9]+)*$/;
+
+async function loadSlugs(url, env) {
+  const res = await env.ASSETS.fetch(new URL("/data/slugs.json", url));
+  return res.ok ? res.json() : {};
+}
+
+function servePage(path, url, request, env) {
+  return env.ASSETS.fetch(new Request(new URL(path, url), request));
+}
+
+async function routePlace(url, request, env) {
+  if (request.method !== "GET" && request.method !== "HEAD") return null;
+  // wrangler dev, routes ayarı yüzünden hostname'i her istekte mahalle.si yapar, bu yüzden
+  // ortam adresten değil YONLENDIRME değişkeninden okunur (wrangler.jsonc: subdomain, .dev.vars: klasor).
+  const isProd = env.YONLENDIRME !== "klasor";
+  const host = isProd ? url.hostname : "localhost";
+  const sub = host.endsWith("." + ROOT_DOMAIN) ? host.slice(0, -ROOT_DOMAIN.length - 1) : "";
+
+  // Subdomain: sayfa türü slug haritasından bulunur
+  if (sub && sub !== "www") {
+    if (url.pathname !== "/") return null; // /data, /img, /styles.css vb. doğrudan Assets'ten
+    const place = (await loadSlugs(url, env))[sub];
+    if (!place) return new Response("Bu adreste bir yer bulunamadı.", { status: 404, headers: { "content-type": "text/plain; charset=utf-8" } });
+    return servePage(PAGE_BY_TYPE[place.tur], url, request, env);
+  }
+
+  // Klasör yolu: /istanbul, /istanbul/atasehir, /istanbul/atasehir/kucukbakkalkoy
+  const segs = url.pathname.split("/").filter(Boolean);
+  if (segs.length < 1 || segs.length > 3 || !segs.every((s) => SLUG_RE.test(s))) return null;
+  if (["data", "img", "api"].includes(segs[0])) return null;
+
+  if (isProd) {
+    const place = (await loadSlugs(url, env))[segs.at(-1)];
+    if (place && place.yol.join("/") === segs.join("/")) {
+      return Response.redirect(`https://${segs.at(-1)}.${ROOT_DOMAIN}/`, 301);
+    }
+    return null;
+  }
+  return servePage(PAGE_BY_DEPTH[segs.length - 1], url, request, env);
+}
