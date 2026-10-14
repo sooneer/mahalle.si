@@ -27,7 +27,8 @@ function h(tag, attrs = {}, ...children) {
     else if (k === "style") el.style.cssText = v;
     else el.setAttribute(k, v === true ? "" : v);
   }
-  for (const c of children.flat()) if (c != null) el.append(c);
+  // `koşul && h(...)` kalıbı false döndürebilir; null gibi atlanır, yoksa ekrana "false" yazılır
+  for (const c of children.flat()) if (c != null && c !== false) el.append(c);
   return el;
 }
 
@@ -297,35 +298,48 @@ async function cizEczaneler(mahalle, ilce) {
   return { baslik: `${tamlayan(mahalle.ad)} eczaneleri`, ozet: `${liste.length} eczane. Telefonla ara ya da yol tarifi al.` };
 }
 
-// --- Özel okullar ------------------------------------------------------------
-// MEB türü → kademe: "Özel Türk Okul Öncesi Kurumu" → "Anaokulu"
+// --- Okullar (özel ve devlet) ------------------------------------------------
+// MEB türü ya da okul adı → kademe: "Özel Türk Okul Öncesi Kurumu" → "Anaokulu", "Ali Fuat Cebesoy İlkokulu" → "İlkokul"
 // (regex'in /i bayrağı "İ"yi "i" saymaz, bu yüzden önce Türkçe küçük harfe çevrilir)
 const KADEMELER = [
+  ["Özel eğitim", /özel eğitim/],
   ["Anaokulu", /okul öncesi|anaokulu/],
   ["İlkokul", /ilkokul/],
   ["Ortaokul", /ortaokul/],
   ["Lise", /lise|ortaöğretim/],
+  ["Diğer", /./], // halk eğitim, BİLSEM, RAM, mesleki eğitim merkezi
 ];
-const kademe = (tur) => KADEMELER.find(([, re]) => re.test(tur.toLocaleLowerCase("tr-TR")))?.[0] ?? "Diğer";
+const kademe = (tur) => KADEMELER.find(([, re]) => re.test(tur.toLocaleLowerCase("tr-TR")))[0];
 // "(MBA)" gibi kısaltmalar basHarf'ten sonra yine büyük harf kalsın
-const okulAdi = (ad) => basHarf(ad).replace(/\(([^)]{1,4})\)/g, (_, k) => `(${k.toLocaleUpperCase("tr-TR")})`);
+const okulAdi = (ad) => basHarf(ad).replace(/\(([^)]{1,4})\)/g, (_, k) => `(${k.toLocaleUpperCase("tr-TR")})`)
+  // Roma rakamları: Türkçe küçük harf "II"yi "ıı" yapar, basHarf'ten sonra "Iı. Kademe" kalır → "II. Kademe"
+  .replace(/(^|\s)([IVX][ıvx]{0,3})\.(?=\s|$)/g, (_, a, r) => `${a}${r.toUpperCase()}.`)
+  .replace(/ Ve /g, " ve ");
 // "KÜÇÜKBAKKALKÖY MAH. KAZIM PAŞA SK. NO: 12 ATAŞEHİR / İSTANBUL" → "Küçükbakkalköy Mah. Kazım Paşa Sk. No: 12"
-const okulAdresi = (adres) => basHarf(adres.replace(/\s*ATAŞEHİR\s*\/\s*İSTANBUL/, ""))
+// Okul sitelerinden gelen adresler karışık yazımlı: "… No1 Ataşehir/İSTANBUL" de aynı şekilde kısalır.
+const okulAdresi = (adres) => basHarf(adres)
+  .replace(/[\s,/]*Ataşehir\s*(\/\s*)?(İstanbul)?(\s*Türkiye)?[\s./]*$/, "") // "… Küçükbakkalköy / Ataşehir / İstanbul"
+  .replace(/[\s,/]+$/, "")
+  .replace(/ Ve /g, " ve ")
+  .replace(/\.(\p{Ll})/gu, (_, h) => "." + h.toLocaleUpperCase("tr-TR")) // boşluksuz "Mh.uzay Sk.no1" → "Mh.Uzay Sk.No1"
   .replace(/(\d)(\p{Ll})\b/gu, (_, r, h) => r + h.toLocaleUpperCase("tr-TR")); // "21a" → "21A"
 // Yalnızca sokağı bilinen okulda koordinat sokağın ortası; yol tarifi adresle aranır.
 const yolTarifi = (o) => "https://www.google.com/maps/dir/?api=1&destination=" +
-  (o.konumHassasiyeti === "bina" ? o.konum.join(",") : encodeURIComponent(`${okulAdi(o.ad)}, ${o.adres}`));
+  (o.konumHassasiyeti === "bina" ? o.konum.join(",") : encodeURIComponent([okulAdi(o.ad), o.adres || "Ataşehir"].join(", ")));
 
-async function cizOkullar(mahalle, ilce) {
-  const data = await load(`/data/okullar/${mahalle.slug}.json`).catch(() => null);
+// Özel ve devlet okulu sayfaları aynı düzende; veri klasörü, renk ve metinler farklı.
+const okulCizici = ({ klasor, renk, zemin, koyu, baslik, ozet, kaynak }) => async function (mahalle, ilce) {
+  const data = await load(`/data/${klasor}/${mahalle.slug}.json`).catch(() => null);
   if (!data?.okullar.length) return null;
+  const bolum = document.querySelector(".kategori-section");
+  Object.entries({ "--okul-renk": renk, "--okul-zemin": zemin, "--okul-koyu": koyu }).forEach(([k, v]) => bolum.style.setProperty(k, v));
 
   const liste = data.okullar.map((o) => ({ ...o, kademe: kademe(o.tur) }));
   const ogeler = liste.map((o) => h("li", { class: "eczane okul", "data-kademe": o.kademe },
     h("span", { class: "eczane-icon" }, icon("i-school")),
     h("div", { class: "eczane-body" },
       h("h3", {}, okulAdi(o.ad)),
-      h("p", {}, okulAdresi(o.adres)),
+      o.adres && h("p", {}, okulAdresi(o.adres)),
       h("span", { class: "okul-tur" }, o.kademe)),
     h("div", { class: "eczane-actions" },
       o.telefon && h("a", { class: "btn btn-soft", href: `tel:${o.telefon}` }, telefonYaz(o.telefon)),
@@ -336,16 +350,16 @@ async function cizOkullar(mahalle, ilce) {
   document.getElementById("liste").append(...ogeler);
 
   const harita = haritayiHazirla(document.getElementById("harita"), mahalle, ilce, liste.filter((o) => o.konum), {
-    renk: "#0f8a87",
+    renk,
     yaklasik: (o) => o.konumHassasiyeti !== "bina",
-    popup: (o) => [h("strong", {}, okulAdi(o.ad)), h("span", {}, `${o.kademe} · ${okulAdresi(o.adres)}`),
+    popup: (o) => [h("strong", {}, okulAdi(o.ad)), h("span", {}, [o.kademe, o.adres && okulAdresi(o.adres)].filter(Boolean).join(" · ")),
       o.konumHassasiyeti !== "bina" && h("em", {}, "Konum yaklaşık: yalnızca sokak biliniyor."),
       o.telefon && h("a", { href: `tel:${o.telefon}` }, telefonYaz(o.telefon))],
   });
 
   // Kademe süzgeci: listeyi ve haritadaki noktaları birlikte süzer
-  const sayilar = Object.fromEntries(KADEMELER.map(([k]) => [k, liste.filter((o) => o.kademe === k).length]));
-  const secenekler = [["Tümü", liste.length], ...Object.entries(sayilar).filter(([, n]) => n)];
+  const sayilar = KADEMELER.map(([k]) => [k, liste.filter((o) => o.kademe === k).length]);
+  const secenekler = [["Tümü", liste.length], ...sayilar.filter(([, n]) => n)];
   const filtre = document.getElementById("filtre");
   filtre.setAttribute("aria-label", "Kademeye göre süz");
   const sec = (secilen) => {
@@ -358,12 +372,25 @@ async function cizOkullar(mahalle, ilce) {
   filtre.addEventListener("click", (e) => { const b = e.target.closest("button"); if (b) sec(b.dataset.kademe); });
   filtre.hidden = false;
 
-  document.getElementById("kaynak").textContent = "Kaynak: MEB özel öğretim kurumları listesi. Haritada içi boş daireyle gösterilen okulların yalnızca sokağı biliniyor, konum yaklaşık. Konumlar © OpenStreetMap katkıcıları.";
-  return { baslik: `${tamlayan(mahalle.ad)} özel okulları`, ozet: `${liste.length} özel okul, anaokulundan liseye. Telefonla ara ya da yol tarifi al.` };
-}
+  document.getElementById("kaynak").textContent = kaynak;
+  return { baslik: baslik(mahalle), ozet: ozet(liste.length) };
+};
+
+const cizOkullar = okulCizici({
+  klasor: "okullar", renk: "#0f8a87", zemin: "#e3f6f5", koyu: "#0b6b69",
+  baslik: (m) => `${tamlayan(m.ad)} özel okulları`,
+  ozet: (n) => `${n} özel okul, anaokulundan liseye. Telefonla ara ya da yol tarifi al.`,
+  kaynak: "Kaynak: MEB özel öğretim kurumları listesi. Haritada içi boş daireyle gösterilen okulların yalnızca sokağı biliniyor, konum yaklaşık. Konumlar © OpenStreetMap katkıcıları.",
+});
+const cizDevletOkullari = okulCizici({
+  klasor: "devlet-okullari", renk: "#2e5aac", zemin: "#e8eefa", koyu: "#22468a",
+  baslik: (m) => `${tamlayan(m.ad)} devlet okulları`,
+  ozet: (n) => `${n} devlet okulu ve eğitim kurumu. Telefonla ara ya da yol tarifi al.`,
+  kaynak: "Kaynak: okulların MEB internet siteleri (iletişim ve harita sayfaları). Kayıt bölgesini öğrenmek için okulu ara.",
+});
 
 // Sayfa slug'ı → çizici. Yeni kategori: buraya ekle, mahalle JSON'unda kategoriye `sayfa` ver, worker.js'te KATEGORI_SAYFALARI'na ekle.
-const CIZICILER = { eczaneler: cizEczaneler, okullar: cizOkullar };
+const CIZICILER = { eczaneler: cizEczaneler, okullar: cizOkullar, "devlet-okullari": cizDevletOkullari };
 
 // --- Harita (MapLibre + OpenFreeMap) -----------------------------------------
 // Kütüphane ~800 KB; yalnızca bölüm görünüme yaklaşınca yüklenir.

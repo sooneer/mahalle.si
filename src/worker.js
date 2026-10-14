@@ -85,7 +85,7 @@ const PAGE_BY_DEPTH = ["/il", "/ilce", "/mahalle"]; // il.html, ilce.html, mahal
 const PAGE_BY_TYPE = { il: "/il", ilce: "/ilce", mahalle: "/mahalle" };
 // Mahallenin kategori sayfaları (kategori.html): kucukbakkalkoy.mahalle.si/eczaneler
 // Yeni kategori: buraya, public/rehber.js CIZICILER'e ve mahalle JSON'unda kategoriye `sayfa` olarak ekle.
-const KATEGORI_SAYFALARI = new Set(["eczaneler", "okullar"]);
+const KATEGORI_SAYFALARI = new Set(["eczaneler", "okullar", "devlet-okullari"]);
 const SLUG_RE = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 
 async function loadSlugs(url, env) {

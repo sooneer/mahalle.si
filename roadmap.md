@@ -239,9 +239,10 @@ Kaynak: il geneli özel okul listesi (HTML tablo: ilçe, ad, tür, adres, telefo
 - [x] **Doğrulama:** Mahalle sınırı dışındaki sonuç atılır. Ad eşleşmesinde OSM adının ayırt edici kelimelerinin hepsi okul adında geçmeli ("Beyaz İnci" ≠ "Beyaz"). Zincir okulun farklı sokaktaki şubesi, adresindeki sokağa 150 m'den uzaksa kampüse bağlanmaz. Sonuçlar `data/okul-konum.json`'da saklanır, elle düzeltilebilir.
 - [x] Okullar sayfası (`kucukbakkalkoy.mahalle.si/okullar`): harita (sokak düzeyindekiler içi boş daire), kademe süzgeci (Anaokulu, İlkokul, Ortaokul, Lise), telefon ve yol tarifi. Ana sayfadaki "Özel Okullar" kartı ve popüler kart (35 Okul) bu sayfaya bağlı.
 - [x] Eczaneler ve okullar ayrı sayfalara taşındı (`/eczaneler`, `/okullar`, `kategori.html`). Mahalle sayfası artık yalnızca kategori kartlarını gösteriyor, harita kütüphanesini (~800 KB) yüklemiyor. Eski `#eczaneler` / `#okullar` bağlantıları yeni sayfaya yönlendiriliyor.
-- [ ] Kart sayıları (`kayitSayisi`) mahalle JSON'unda elle yazılı. Betikler (`eczane-bol.js`, `okul-donustur.js`) veri değişince bu sayıyı kendiliğinden güncellemeli.
+- [ ] Kart sayıları (`kayitSayisi`) mahalle JSON'unda. `okul-donustur.js` okul ve devlet okulu sayılarını kendisi güncelliyor; `eczane-bol.js` henüz güncellemiyor.
 - [ ] Sokak düzeyindeki 11 okulun konumu elle doğrulanmalı. `data/` gitignore'da olduğu için `okul-konum.json` düzeltmeleri repoya girmiyor, kalıcı olması için dosya repoya alınmalı.
-- [ ] Devlet okulları listede yok. Kart "Özel Okullar" olarak adlandırıldı, devlet okulları için ayrı kaynak gerekir.
+- [x] Devlet okulları: `data/devlet-okul.json` (89 Ataşehir okulu, HOST + YOL) → `scripts/devlet-okul-topla.js` okulların MEB sitelerinden konum (`tema/harita.php`), telefon ve adres (`okulumuz_hakkinda.html`, iki farklı şablon) toplar. Sayfa: `kucukbakkalkoy.mahalle.si/devlet-okullari`. Mahalle adresten, adres yoksa konumun düştüğü OSM sınırından bulunur.
+- [ ] Devlet okullarında kayıt bölgesi (adrese dayalı kayıt) bilgisi yok. Veliler için en önemli bilgi bu, kaynak araştırılmalı.
 - [ ] Elenen: Google Geocoding API. Kullanım şartları sonucun Google dışı haritada (MapLibre) gösterilmesini ve kalıcı saklanmasını yasaklıyor.
 - [ ] Kaynağın kullanım koşulları (MEB?) kontrol edilmeli. Adresler dış servise gönderilmeden önce onay alınmalı.
 

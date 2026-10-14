@@ -25,6 +25,7 @@ cp .dev.vars.example .dev.vars        # ilk kurulumda bir kez (klasör modunu a�
 npx wrangler dev                       # yerel önizleme (http://localhost:8787/istanbul/atasehir/kucukbakkalkoy)
 npx wrangler deploy                    # yayına alma
 node scripts/eczane-bol.js             # data/eczane.json → public/data/eczaneler/<mahalle>.json
+node scripts/devlet-okul-topla.js        # devlet okulları: MEB okul sitelerinden konum, telefon, adres → data/devlet-okul-meb.json (yavaş: 1 istek/sn)
 node scripts/okul-konum.js KÜÇÜKBAKKALKÖY  # okul konumları (Nominatim) → data/okul-konum.json, okul-donustur'dan önce
 node scripts/okul-donustur.js          # data/ozel-okul.html → data/ozel-okul.json + public/data/okullar/<mahalle>.json
 node scripts/mahalle-sinir.js ATAŞEHİR  # OSM mahalle sınırları → data/osm-atasehir.geojson (Nominatim, yavaş: 1 istek/sn)
